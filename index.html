@@ -491,89 +491,107 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 
 
 /* ══ DESKTOP LAYOUT ══ */
+#dsk-header{display:none;}
 #dsk-sidebar{display:none;}
 #dsk-main{display:contents;}
+
+/* Carousel banner */
+.slw{position:relative;overflow:hidden;touch-action:pan-y;}
+.slw.carousel-mode .sltr{display:flex;align-items:center;gap:0;will-change:transform;transition:transform .5s cubic-bezier(.4,0,.2,1);}
+.slw.carousel-mode .slide{min-width:60%;height:220px;flex-shrink:0;border-radius:16px;overflow:hidden;transition:opacity .4s,filter .4s,transform .4s;opacity:.45;filter:blur(1.5px) brightness(.7);transform:scale(.92);cursor:pointer;}
+.slw.carousel-mode .slide.active{opacity:1;filter:none;transform:scale(1);cursor:default;}
+
 @media(min-width:900px){
-  :root{--bot:0px;}
+  :root{--bot:0px;--nav:64px;}
   .bot{display:none!important;}
   .ham,.backbtn{display:none!important;}
   .drw,.dov{display:none!important;}
-  body{display:flex!important;}
-  #dsk-sidebar{display:flex!important;flex-direction:column;width:240px;min-width:240px;height:100vh;position:sticky;top:0;background:var(--bg2);border-right:1px solid var(--br);box-shadow:2px 0 16px rgba(0,0,0,.06);z-index:100;overflow-y:auto;}
-  #dsk-sidebar .sb-brand{padding:20px 18px 14px;border-bottom:1px solid var(--br);display:flex;align-items:center;gap:10px;}
-  #dsk-sidebar .sb-brand img{height:38px;object-fit:contain;}
-  #dsk-sidebar .sb-brand span{font-size:15px;font-weight:900;color:var(--t);}
-  #dsk-sidebar .sb-nav{flex:1;padding:12px 10px;}
-  #dsk-sidebar .sb-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;cursor:pointer;transition:background .15s;font-size:14px;font-weight:600;color:var(--t2);margin-bottom:2px;}
-  #dsk-sidebar .sb-item:hover{background:var(--bg3);}
-  #dsk-sidebar .sb-item.on{background:var(--Rl);color:var(--R);}
-  #dsk-sidebar .sb-item.on svg{stroke:var(--R);}
-  #dsk-sidebar .sb-item svg{width:18px;height:18px;stroke:var(--t3);flex-shrink:0;transition:stroke .15s;}
-  #dsk-sidebar .sb-foot{padding:14px 10px;border-top:1px solid var(--br);}
-  #dsk-sidebar .sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--bg3);margin-bottom:8px;cursor:pointer;}
-  #dsk-sidebar .sb-un{font-size:13px;font-weight:700;color:var(--t);flex:1;}
-  #dsk-sidebar .sb-uw{font-size:11px;color:var(--G);font-weight:600;}
-  #dsk-sidebar .sb-loginbtn{width:100%;padding:11px;border-radius:12px;background:var(--R);color:#fff;border:none;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:var(--sR);}
-  #dsk-sidebar .sb-adminbtn{width:100%;padding:10px;border-radius:12px;background:linear-gradient(135deg,var(--R),var(--Rd));color:#fff;border:none;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:8px;}
-  #dsk-main{display:block!important;flex:1;min-width:0;max-width:960px;margin:0 auto;overflow-y:auto;height:100vh;}
+
+  /* Header */
+  #dsk-header{
+    display:flex!important;align-items:center;
+    position:sticky;top:0;z-index:200;
+    height:var(--nav);background:var(--bg2);
+    border-bottom:1px solid var(--br);
+    padding:0 32px;gap:24px;
+    box-shadow:0 2px 12px rgba(0,0,0,.07);
+  }
+  #dsk-header .dh-brand{display:flex;align-items:center;gap:10px;text-decoration:none;flex-shrink:0;}
+  #dsk-header .dh-brand img{height:36px;object-fit:contain;}
+  #dsk-header .dh-brand span{font-size:16px;font-weight:900;color:var(--t);}
+  #dsk-header .dh-nav{display:flex;align-items:center;gap:4px;flex:1;}
+  #dsk-header .dh-item{padding:8px 16px;border-radius:10px;font-size:14px;font-weight:600;color:var(--t2);cursor:pointer;transition:background .15s,color .15s;white-space:nowrap;}
+  #dsk-header .dh-item:hover{background:var(--bg3);color:var(--t);}
+  #dsk-header .dh-item.on{background:var(--Rl);color:var(--R);}
+  #dsk-header .dh-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+  #dsk-header .dh-wallet{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1.5px solid var(--br);border-radius:20px;padding:6px 14px;font-size:13px;font-weight:700;color:var(--G);cursor:pointer;}
+  #dsk-header .dh-loginbtn{background:var(--R);color:#fff;border:none;padding:9px 20px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;box-shadow:var(--sR);}
+  #dsk-header .dh-av{width:36px;height:36px;border-radius:50%;background:var(--R);color:#fff;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:var(--sR);}
+  #dsk-header .dh-adminbtn{background:linear-gradient(135deg,var(--R),var(--Rd));color:#fff;border:none;padding:8px 14px;border-radius:10px;font-weight:700;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:6px;}
+
+  /* Hide mobile nav */
   .nav{display:none!important;}
-  #pH,#pG,#pD,#pR,#pA,#pP,#pHist,#pHelp,#pWallet{padding-bottom:40px;padding-top:24px;}
-  .pgrid{grid-template-columns:repeat(4,1fr)!important;}
-  .agrid{grid-template-columns:repeat(5,1fr)!important;}
-  .slide{height:260px!important;}
-  #ntfWrap{left:260px;transform:none;right:20px;width:auto;max-width:400px;}
+
+  /* Main content */
+  body{display:block;}
+  #dsk-main{display:block!important;}
+  .page{max-width:1200px;margin:0 auto;padding:24px 32px 48px!important;}
+
+  #pH,#pG,#pD,#pR,#pA,#pP,#pHist,#pHelp,#pWallet{padding-bottom:48px;}
+
+  /* Carousel on desktop */
+  .slw.carousel-mode{padding:24px 0;background:var(--bg);}
+  .slw.carousel-mode .slide{min-width:55%;height:280px;}
+
+  /* Grids */
+  .pgrid{grid-template-columns:repeat(5,1fr)!important;}
+  .agrid{grid-template-columns:repeat(6,1fr)!important;}
+
+  /* Notif */
+  #ntfWrap{right:24px;left:auto;transform:none;width:360px;}
+
+  /* Sheets center */
   .shov,.eov{align-items:center;justify-content:center;}
-  .sheet,.esheet{border-radius:20px!important;max-width:500px;max-height:80vh;}
-  .page{padding-left:20px;padding-right:20px;}
+  .sheet,.esheet{border-radius:20px!important;max-width:520px;max-height:80vh;}
 }
 </style>
 </head>
 <body>
 
-<!-- DESKTOP SIDEBAR -->
-<div id="dsk-sidebar">
-  <div class="sb-brand">
+<!-- DESKTOP HEADER -->
+<header id="dsk-header">
+  <div class="dh-brand" onclick="go('home');dhOn('dh-home')">
     <img src="https://img2.pic.in.th/2669.png" alt="Easy Store">
     <span>Easy Store</span>
   </div>
-  <div class="sb-nav">
-    <div class="sb-item on" id="sb-home" onclick="go('home');sbOn('sb-home')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>ໜ້າຫຼັກ
-    </div>
-    <div class="sb-item" id="sb-games" onclick="go('games');sbOn('sb-games')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M8 12h2m0 0h2m-2 0v-2m0 2v2"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="19" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="19" cy="14" r="1" fill="currentColor" stroke="none"/></svg>ເກມທັງໝົດ
-    </div>
-    <div class="sb-item" id="sb-history" onclick="needAuth(()=>{go('history');sbOn('sb-history')})">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>ປະຫວັດ
-    </div>
-    <div class="sb-item" id="sb-profile" onclick="needAuth(()=>{go('profile');sbOn('sb-profile')})">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>ໂປຣໄຟລ໌
-    </div>
-    <div class="sb-item" id="sb-help" onclick="go('help');sbOn('sb-help')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg>ຕິດຕໍ່ຫາ
-    </div>
-  </div>
-  <div class="sb-foot">
-    <div id="sb-adminWrap" style="display:none">
-      <button class="sb-adminbtn" onclick="openAdm()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin Panel
+  <nav class="dh-nav">
+    <div class="dh-item on" id="dh-home" onclick="go('home');dhOn('dh-home')">ໜ້າຫຼັກ</div>
+    <div class="dh-item" id="dh-games" onclick="go('games');dhOn('dh-games')">ເກມທັງໝົດ</div>
+    <div class="dh-item" id="dh-history" onclick="needAuth(()=>{go('history');dhOn('dh-history')})">ປະຫວັດ</div>
+    <div class="dh-item" id="dh-profile" onclick="needAuth(()=>{go('profile');dhOn('dh-profile')})">ໂປຣໄຟລ໌</div>
+    <div class="dh-item" id="dh-help" onclick="go('help');dhOn('dh-help')">ຕິດຕໍ່ຫາ</div>
+  </nav>
+  <div class="dh-right">
+    <div id="dh-adminWrap" style="display:none">
+      <button class="dh-adminbtn" onclick="openAdm()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin
       </button>
     </div>
-    <div id="sb-userWrap" style="display:none">
-      <div class="sb-user" onclick="go('profile');sbOn('sb-profile')">
-        <div class="av" id="sb-av">U</div>
-        <div><div class="sb-un" id="sb-un"></div><div class="sb-uw" id="sb-uw"></div></div>
+    <div id="dh-walletWrap" style="display:none">
+      <div class="dh-wallet" onclick="needAuth(()=>go('pWallet'))">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M16 12h2"/></svg>
+        <span id="dh-bal">0 ກີບ</span>
       </div>
-      <button style="width:100%;padding:9px;border-radius:10px;background:var(--bg3);border:1px solid var(--br);color:var(--t2);font-weight:600;font-size:12px;cursor:pointer;" onclick="doLogout()">ອອກຈາກລະບົບ</button>
     </div>
-    <div id="sb-loginWrap">
-      <button class="sb-loginbtn" onclick="go('auth')">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>ເຂົ້າສູ່ລະບົບ
-      </button>
+    <div id="dh-loginWrap">
+      <button class="dh-loginbtn" onclick="go('auth')">ເຂົ້າສູ່ລະບົບ</button>
+    </div>
+    <div id="dh-userWrap" style="display:none">
+      <div class="dh-av" id="dh-av" onclick="go('profile');dhOn('dh-profile')" title="">U</div>
     </div>
   </div>
-</div>
-<!-- DESKTOP MAIN CONTENT -->
+</header>
+<!-- MAIN CONTENT -->
 <div id="dsk-main">
 <div id="loader">
   <div class="loader-logo"><img src="https://img2.pic.in.th/2669.png" alt="Easy Store Logo"></div>
@@ -1158,14 +1176,14 @@ let SI=0,slTm=null,isDg=false,sX=0,cX=0;
 function rBanner(){
   const bans=S.g('bans')||[];const tr=document.getElementById('sltr'),dt=document.getElementById('sldots');if(!tr)return;tr.innerHTML='';dt.innerHTML='';
   bans.forEach((b,i)=>{const s=document.createElement('div');s.className='slide';s.innerHTML=b.url&&b.url.startsWith('http')?`<img src="${b.url}" alt="" onerror="this.parentNode.innerHTML='<div class=slph style=background:${b.col}><div class=slt>${b.title}</div></div>'">`:`<div class="slph" style="background:${b.col}"><div class="slt">${b.title}</div><div class="sls">${b.sub||''}</div></div>`;tr.appendChild(s);const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>gSlide(i);dt.appendChild(d);});
-  SI=0;clearInterval(slTm);slTm=setInterval(()=>gSlide(SI+1),4500);
+  SI=0;clearInterval(slTm);slTm=setInterval(()=>gSlide(SI+1),4500);setTimeout(initCarousel,50);
   const w=document.getElementById('slw');if(!w)return;const gX=e=>e.touches?e.touches[0].clientX:e.clientX;
   w.onmousedown=e=>{isDg=true;sX=gX(e);cX=sX;};w.ontouchstart=e=>{isDg=true;sX=gX(e);cX=sX;};
   w.onmousemove=e=>{if(isDg)cX=gX(e);};w.ontouchmove=e=>{if(isDg)cX=gX(e);};
   const end=()=>{if(isDg){isDg=false;if(Math.abs(sX-cX)>42)gSlide(SI+(sX-cX>0?1:-1));}};
   w.onmouseup=end;w.ontouchend=end;
 }
-function gSlide(n){const t=S.g('bans')||[];SI=((n%t.length)+t.length)%t.length;const tr=document.getElementById('sltr');if(tr)tr.style.transform=`translateX(-${SI*100}%)`;document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===SI));}
+function gSlide(n){const t=S.g('bans')||[];SI=((n%t.length)+t.length)%t.length;const slw=document.getElementById('slw');const isC=slw&&slw.classList.contains('carousel-mode');if(!isC){const tr=document.getElementById('sltr');if(tr)tr.style.transform=`translateX(-${SI*100}%)`;}else{updCarousel();}document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===SI));}
 function slBy(d){gSlide(SI+d);}
 function TH(g,full){return g.img?`<img src="${g.img}" style="width:100%;height:100%;object-fit:cover">`:`<div style="width:100%;height:100%;background:${g.col};display:flex;align-items:center;justify-content:center;font-size:${full?'36px':'32px'}">${g.e||''}</div>`;}
 function rHome(){rBanner();rPop();rGrid('agH');}
@@ -1450,30 +1468,58 @@ async function loadAllUsers(){try{const d=await api('GET','/admin/users');S.s('u
 
 
 
-// ── Desktop Sidebar ──────────────────────────────────────────
-function sbOn(id){
-  document.querySelectorAll('#dsk-sidebar .sb-item').forEach(i=>i.classList.remove('on'));
+// ── Desktop Header ───────────────────────────────────────────
+function dhOn(id){
+  document.querySelectorAll('#dsk-header .dh-item').forEach(i=>i.classList.remove('on'));
   const el=document.getElementById(id);if(el)el.classList.add('on');
 }
 function updSidebar(){
-  const sw=document.getElementById('sb-userWrap');
-  const lw=document.getElementById('sb-loginWrap');
-  const aw=document.getElementById('sb-adminWrap');
-  if(!sw||!lw)return;
+  const uw=document.getElementById('dh-userWrap');
+  const lw=document.getElementById('dh-loginWrap');
+  const aw=document.getElementById('dh-adminWrap');
+  const ww=document.getElementById('dh-walletWrap');
+  if(!lw)return;
   if(CU){
-    sw.style.display='block';lw.style.display='none';
-    const av=document.getElementById('sb-av');
-    const un=document.getElementById('sb-un');
-    const uw=document.getElementById('sb-uw');
-    if(av)av.textContent=CU.name[0].toUpperCase();
-    if(un)un.textContent=CU.name;
-    if(uw)uw.textContent=(CU.wallet||0).toLocaleString()+' ກີບ';
-    if(aw)aw.style.display=CU.isAdmin?'block':'none';
+    if(uw)uw.style.display='flex';
+    if(lw)lw.style.display='none';
+    if(ww)ww.style.display='flex';
+    const av=document.getElementById('dh-av');
+    const bal=document.getElementById('dh-bal');
+    if(av){av.textContent=CU.name[0].toUpperCase();av.title=CU.name;}
+    if(bal)bal.textContent=(CU.wallet||0).toLocaleString()+' ກີບ';
+    if(aw)aw.style.display=CU.isAdmin?'flex':'none';
   }else{
-    sw.style.display='none';lw.style.display='block';
+    if(uw)uw.style.display='none';
+    if(lw)lw.style.display='flex';
+    if(ww)ww.style.display='none';
     if(aw)aw.style.display='none';
   }
 }
+
+// ── Carousel Banner ───────────────────────────────────────────
+function initCarousel(){
+  const isDesk=window.innerWidth>=900;
+  const slw=document.getElementById('slw');
+  if(!slw)return;
+  if(isDesk){slw.classList.add('carousel-mode');}
+  else{slw.classList.remove('carousel-mode');}
+  updCarousel();
+}
+function updCarousel(){
+  const slw=document.getElementById('slw');
+  if(!slw||!slw.classList.contains('carousel-mode'))return;
+  const slides=slw.querySelectorAll('.slide');
+  const n=slides.length;if(!n)return;
+  slides.forEach((s,i)=>{
+    s.classList.remove('active');
+    let diff=(i-SI+n)%n;
+    if(diff>n/2)diff-=n;
+    if(diff===0){s.classList.add('active');}
+  });
+  const tr=document.getElementById('sltr');
+  if(tr)tr.style.transform=`translateX(calc(-${SI*60}% + 20%))`;
+}
+window.addEventListener('resize',initCarousel);
 
 window.onload=async()=>{
   await initDB();loadSess();
