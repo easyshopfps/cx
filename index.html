@@ -3,22 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Easy Store - ເຕີມເກມງ່າຍໆ</title>
-<meta name="description" content="Easy Store ເຕີມເກມງ່າຍໆ ທຸກເກມ ທຸກເວລາ 24/7 ເຕີມໄດ້ທັນທີ">
-<meta name="keywords" content="ເຕີມເກມງ່າຍໆ, Easy Store, ເຕີມເກມ, top up game, ເຕີມເກມລາວ">
-<meta name="robots" content="index, follow">
-<meta name="author" content="Easy Store">
-<link rel="canonical" href="https://easystores.xyz/">
-<!-- Open Graph (Facebook / Line) -->
-<meta property="og:title" content="Easy Store - ເຕີມເກມງ່າຍໆ">
-<meta property="og:description" content="Easy Store ເຕີມເກມງ່າຍໆ ທຸກເກມ ທຸກເວລາ 24/7">
-<meta property="og:url" content="https://easystores.xyz/">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Easy Store">
-<!-- Twitter Card -->
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Easy Store - ເຕີມເກມງ່າຍໆ">
-<meta name="twitter:description" content="Easy Store ເຕີມເກມງ່າຍໆ ທຸກເກມ ທຸກເວລາ 24/7">
+<title>Easy Store</title>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Lao:wght@400;600;700;900&family=Kanit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ── THEME: White/Light ── */
@@ -448,11 +433,13 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 /* LOADING */
 #loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px;transition:opacity .5s ease,visibility .5s ease;}
 #loader.hide{opacity:0;visibility:hidden;}
-.loader-logo{width:72px;height:72px;background:var(--R);border-radius:20px;display:flex;align-items:center;justify-content:center;box-shadow:var(--sR);}
+.loader-logo{width:80px;height:80px;display:flex;align-items:center;justify-content:center;}
+.loader-logo img{width:80px;height:80px;object-fit:contain;}
 .loader-name{font-size:22px;font-weight:900;color:var(--t);}
-.loader-spin{width:36px;height:36px;}
+.loader-spin{width:36px;height:36px;animation:spinR .8s linear infinite;}
 .loader-spin circle{stroke:var(--br2);fill:none;stroke-width:3;}
-.loader-spin path{stroke:var(--R);fill:none;stroke-width:3;stroke-linecap:round;animation:spin .8s linear infinite;}
+.loader-spin path{stroke:var(--R);fill:none;stroke-width:3;stroke-linecap:round;}
+@keyframes spinR{from{transform:rotate(0deg);}to{transform:rotate(360deg);}}
 @keyframes spin{to{transform:rotate(360deg);}}
 
 /* ═══════════════════════════════════════
@@ -506,7 +493,7 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 </head>
 <body>
 <div id="loader">
-  <div class="loader-logo"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+  <div class="loader-logo"><img src="https://img2.pic.in.th/2669.png" alt="Easy Store Logo"></div>
   <div class="loader-name">Easy Store</div>
   <svg class="loader-spin" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15"/><path d="M18 3a15 15 0 0115 15"/></svg>
 </div>
@@ -574,6 +561,7 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 <div class="page on" id="pH">
   <nav class="nav">
     <button class="ham" id="hamB" onclick="oD()"><span></span><span></span><span></span></button>
+    <img src="https://img2.pic.in.th/2669.png" alt="Easy Store" style="height:32px;object-fit:contain;margin-left:4px;">
     <div style="flex:1"></div>
     <div class="nav-r" id="nR1"></div>
   </nav>
