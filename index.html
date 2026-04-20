@@ -90,27 +90,30 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 .bic{width:42px;height:42px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--t3);transition:all .2s;}
 .bnl{font-size:10px;color:var(--t3);font-weight:600;}
 /* NOTIF */
-#ntfWrap{position:fixed;bottom:calc(var(--bot)+12px);left:50%;transform:translateX(-50%);z-index:9990;display:flex;flex-direction:column-reverse;align-items:center;gap:8px;pointer-events:none;width:100%;max-width:420px;padding:0 16px;}
-.ntf{width:100%;background:var(--w2);border-radius:20px;padding:16px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(0,0,0,.4);pointer-events:all;transform:translateY(110%) scale(.96);opacity:0;transition:transform .42s cubic-bezier(.34,1.56,.64,1),opacity .3s ease;position:relative;overflow:hidden;border:1px solid var(--br);}
-.ntf.in{transform:translateY(0) scale(1);opacity:1;}
-.ntf.out{transform:translateY(30px) scale(.96);opacity:0;transition:transform .28s ease,opacity .22s ease;}
-.ntf::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:20px 0 0 20px;}
-.ntf.ok::before{background:#16a34a;}.ntf.err::before{background:var(--R);}.ntf.warn::before{background:#d97706;}.ntf.info::before{background:#2563eb;}
-.ntf-ico{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ntf.ok .ntf-ico{background:rgba(22,163,74,.15);color:#16a34a;}
-.ntf.err .ntf-ico{background:rgba(232,25,44,.15);color:var(--R);}
-.ntf.warn .ntf-ico{background:rgba(217,119,6,.15);color:#d97706;}
-.ntf.info .ntf-ico{background:rgba(37,99,235,.15);color:#2563eb;}
-.ntf-ck{stroke-dasharray:22;stroke-dashoffset:22;animation:ntfCkDraw .38s .18s ease forwards;}
-@keyframes ntfCkDraw{to{stroke-dashoffset:0;}}
-.ntf-body{flex:1;min-width:0;}
-.ntf-ttl{font-size:14px;font-weight:800;color:var(--t);}
-.ntf-sub{font-size:12px;color:var(--t2);margin-top:2px;}
-.ntf-prog-wrap{position:absolute;bottom:0;left:4px;right:0;height:2px;background:var(--br);overflow:hidden;}
-.ntf-prog{height:100%;transform-origin:left;animation:ntfProg var(--nd,3.2s) .1s linear forwards;}
-@keyframes ntfProg{to{transform:scaleX(0);}}
-.ntf.ok .ntf-prog{background:#16a34a;}.ntf.err .ntf-prog{background:var(--R);}
-.ntf.warn .ntf-prog{background:#d97706;}.ntf.info .ntf-prog{background:#2563eb;}
+/* ── Global Popup Alert ──────────────────────────────────── */
+#popAlert{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px;}
+#popAlert.on{display:flex;}
+.pa-box{background:#fff;border-radius:28px;width:100%;max-width:320px;padding:40px 28px 32px;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.45);position:relative;transform:scale(.84) translateY(16px);opacity:0;transition:transform .38s cubic-bezier(.34,1.56,.64,1),opacity .28s ease;}
+#popAlert.on .pa-box{transform:scale(1) translateY(0);opacity:1;}
+.pa-icon{width:90px;height:90px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;position:relative;}
+.pa-icon::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:3px solid currentColor;opacity:.25;transform:scale(0);animation:paRing .4s .05s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes paRing{to{transform:scale(1);opacity:1;}}
+.pa-icon.ok{background:rgba(22,163,74,.12);color:#16a34a;}
+.pa-icon.err{background:rgba(232,25,44,.1);color:#e8192c;}
+.pa-icon.warn{background:rgba(217,119,6,.1);color:#d97706;}
+.pa-icon.info{background:rgba(37,99,235,.1);color:#2563eb;}
+.pa-icon.loading{background:rgba(37,99,235,.1);color:#2563eb;}
+.pa-spin{animation:paSpin .8s linear infinite;}
+@keyframes paSpin{to{transform:rotate(360deg);}}
+.pa-ck{stroke-dasharray:28;stroke-dashoffset:28;animation:paCkDraw .45s .15s ease forwards;}
+@keyframes paCkDraw{to{stroke-dashoffset:0;}}
+.pa-title{font-size:22px;font-weight:900;color:#0f172a;margin-bottom:8px;}
+.pa-sub{font-size:14px;color:#475569;line-height:1.5;}
+.pa-bar{height:3px;background:#e8ecf0;border-radius:3px;margin-top:24px;overflow:hidden;}
+.pa-prog{height:100%;border-radius:3px;transform-origin:left;animation:paDrain var(--pd,3s) .1s linear forwards;}
+@keyframes paDrain{to{transform:scaleX(0);}}
+/* legacy ntfWrap hidden */
+#ntfWrap{display:none!important;}
 /* SUCCESS POPUP */
 .spov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:800;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
 .spov.on{display:flex;}
@@ -634,6 +637,15 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 </div>
 
 <div id="ntfWrap"></div>
+<!-- Global Popup Alert -->
+<div id="popAlert" onclick="if(event.target===this)closePopAlert()">
+  <div class="pa-box" id="paBox">
+    <div class="pa-icon ok" id="paIcon"></div>
+    <div class="pa-title" id="paTitle"></div>
+    <div class="pa-sub" id="paSub"></div>
+    <div class="pa-bar"><div class="pa-prog" id="paProg"></div></div>
+  </div>
+</div>
 <div class="dov" id="dov" onclick="cD()"></div>
 <div class="drw" id="drw">
   <button class="dc" onclick="cD()">&#10005;</button>
@@ -658,7 +670,7 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
   </div>
 </div>
 
-<div class="spov" id="spov"><div class="spbox"><div class="spring"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--G)" stroke-width="2.5"><polyline class="spcheck" points="20 6 9 17 4 12"/></svg></div><div class="spt" id="spt"></div><div class="sps" id="sps"></div><div class="spbar"><div class="spprog"></div></div></div></div>
+<!-- spov replaced by popAlert -->
 
 <div class="pupov" id="pupov" onclick="closePup()">
   <div style="position:relative;width:85%;max-width:340px;" onclick="event.stopPropagation()">
@@ -1177,21 +1189,60 @@ const _NTF_DUR=3200;
 const _ICONS={ok:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline class="ntf-ck" points="20 6 9 17 4 12"/></svg>`,err:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,warn:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>`,info:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>`};
 const _TTL={ok:'ສຳເລັດ!',err:'ຜິດພາດ!',warn:'ແຈ້ງເຕືອນ',info:'ແຈ້ງ'};
 function closeNtf(el){el.classList.add('out');clearTimeout(el._nt);setTimeout(()=>el.remove(),280);}
+// ── Unified Popup Alert System ───────────────────────────────
+let _paTimer=null;
+const PA_ICONS={
+  ok:`<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline class="pa-ck" points="20 6 9 17 4 12"/></svg>`,
+  err:`<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  warn:`<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg>`,
+  info:`<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r=".5" fill="currentColor"/></svg>`,
+  loading:`<svg class="pa-spin" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-opacity=".2"/><path d="M21 12a9 9 0 00-9-9"/></svg>`
+};
+const PA_COLORS={ok:'ok',err:'err',warn:'warn',info:'info',loading:'info'};
+const PA_TITLES={ok:'ສຳເລັດ!',err:'ຜິດພາດ!',warn:'ແຈ້ງເຕືອນ',info:'ຂໍ້ມູນ',loading:'ກຳລັງດຳເນີນການ...'};
+
+function showPopAlert(type, title, sub, dur, cb){
+  const ov=document.getElementById('popAlert');
+  const icon=document.getElementById('paIcon');
+  const prog=document.getElementById('paProg');
+  const t=type||'info';
+  const d=dur||3000;
+  icon.className='pa-icon '+PA_COLORS[t];
+  icon.innerHTML=PA_ICONS[t]||PA_ICONS.info;
+  document.getElementById('paTitle').textContent=title||PA_TITLES[t];
+  document.getElementById('paSub').textContent=sub||'';
+  // progress bar color
+  const progColors={ok:'#16a34a',err:'#e8192c',warn:'#d97706',info:'#2563eb',loading:'#2563eb'};
+  prog.style.background=progColors[t];
+  prog.style.animation='none';
+  prog.style.setProperty('--pd', d+'ms');
+  ov.classList.remove('on');
+  void ov.offsetWidth;
+  ov.classList.add('on');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{prog.style.animation='';}));
+  clearTimeout(_paTimer);
+  if(t!=='loading'){
+    _paTimer=setTimeout(()=>{closePopAlert();if(cb)setTimeout(cb,200);}, d);
+  }
+}
+function closePopAlert(){
+  document.getElementById('popAlert').classList.remove('on');
+  clearTimeout(_paTimer);
+}
+function showLoading(msg){
+  showPopAlert('loading','ກຳລັງດຳເນີນການ...',msg||'',999999);
+}
+function hideLoading(){
+  closePopAlert();
+}
+
+// Map old toast -> new popup
 function toast(msg,type){
-  const t=type||'info';const wrap=document.getElementById('ntfWrap');
-  const all=wrap.querySelectorAll('.ntf');if(all.length>=3)closeNtf(all[0]);
-  const el=document.createElement('div');el.className='ntf '+t;el.style.setProperty('--nd',_NTF_DUR+'ms');
-  el.innerHTML=`<div class="ntf-ico">${_ICONS[t]||_ICONS.info}</div><div class="ntf-body"><div class="ntf-ttl">${_TTL[t]}</div>${msg&&msg!==_TTL[t]?`<div class="ntf-sub">${msg}</div>`:''}</div><div class="ntf-prog-wrap"><div class="ntf-prog"></div></div>`;
-  wrap.appendChild(el);requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('in')));
-  el._nt=setTimeout(()=>closeNtf(el),_NTF_DUR+200);
+  const t=type||'info';
+  showPopAlert(t, PA_TITLES[t]||msg, t!=='info'?msg:'', 3000);
 }
 function showSuccess(title,sub,cb){
-  const ov=document.getElementById('spov');
-  document.getElementById('spt').textContent=title;document.getElementById('sps').textContent=sub;
-  const box=ov.querySelector('.spbox'),prog=box.querySelector('.spprog');
-  box.style.animation='none';prog.style.animation='none';
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{box.style.animation='';prog.style.animation='';}));
-  ov.classList.add('on');clearTimeout(ov._t);ov._t=setTimeout(()=>{ov.classList.remove('on');if(cb)cb();},2300);
+  showPopAlert('ok', title||'ສຳເລັດ!', sub||'', 2500, cb);
 }
 
 /* POPUP */
@@ -1309,7 +1360,7 @@ function openCof(){
   go('confirm');
 }
 function cCof(){go('detail','back');}
-async function doOrder(){
+async function doOrder(){showLoading('ກຳລັງສົ່ງຄຳສັ່ງ...');
   const uid=document.getElementById('uIn').value.trim();
   const gm=S.g('games')||[];const g=gm.find(x=>x.id===cGid);
   const pkgs=(S.g('pkgs')||{})[cGid]||[];const p=pkgs.find(x=>x.id===cPkg);
@@ -1529,14 +1580,16 @@ async function damLogin(){
   const pw=document.getElementById('dam-lP').value;
   const errEl=document.getElementById('dam-lErr');
   errEl.classList.remove('on');
-  if(!id||!pw){errEl.textContent='ກະລຸນາຕື່ມຂໍ້ມູນ';errEl.classList.add('on');return;}
+  if(!id||!pw){toast('ກະລຸນາຕື່ມຂໍ້ມູນ','warn');return;}
+  showLoading('ກຳລັງກວດສອບ...');
   try{
     const res=await api('POST','/auth/login',{identifier:id,password:pw});
     setToken(res.token);
+    hideLoading();
     CU={name:res.user.name,email:res.user.email,role:res.user.role||'user',isAdmin:res.user.role==='admin',wallet:res.user.wallet||0,user_id:res.user.user_id||'-'};
     S.s('sess',CU);updNav();closeAuthModal();
     showSuccess('ສຳເລັດ!','ສະບາຍດີ '+CU.name,()=>{go('home');if(CU.isAdmin)setTimeout(openAdm,400);});
-  }catch(e){errEl.textContent='ຂໍ້ມູນບໍ່ຖືກຕ້ອງ';errEl.classList.add('on');}
+  }catch(e){hideLoading();toast('ຂໍ້ມູນບໍ່ຖືກຕ້ອງ','err');}
 }
 async function damRegister(){
   const name=document.getElementById('dam-rN').value.trim();
@@ -1553,13 +1606,15 @@ async function damRegister(){
   if(pw.length<6){pErr.textContent='ລະຫັດ 6 ຕົວຂຶ້ນໄປ';pErr.classList.add('on');ok=false;}
   if(pw!==pw2){pErr.textContent='ລະຫັດບໍ່ກົງກັນ';pErr.classList.add('on');ok=false;}
   if(!ok)return;
+  showLoading('ກຳລັງສ້າງບັນຊີ...');
   try{
     const res=await api('POST','/auth/register',{name,email,password:pw});
     setToken(res.token);
     CU={name:res.user.name,email:res.user.email,role:'user',isAdmin:false,wallet:0,user_id:res.user.user_id||'-'};
+    hideLoading();
     S.s('sess',CU);updNav();closeAuthModal();
     showSuccess('ສຳເລັດ!','ຍິນດີຕ້ອນຮັບ '+name,()=>go('home'));
-  }catch(e){pErr.textContent='ລົ້ມເຫຼວ: '+e.message;pErr.classList.add('on');}
+  }catch(e){hideLoading();toast(e.message,'err');}
 }
 
 // ── Infinite Carousel ─────────────────────────────────────────
