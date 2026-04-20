@@ -90,27 +90,30 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 .bic{width:42px;height:42px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;color:var(--t3);transition:all .2s;}
 .bnl{font-size:10px;color:var(--t3);font-weight:600;}
 /* NOTIF */
-#ntfWrap{position:fixed;bottom:calc(var(--bot)+12px);left:50%;transform:translateX(-50%);z-index:9990;display:flex;flex-direction:column-reverse;align-items:center;gap:8px;pointer-events:none;width:100%;max-width:420px;padding:0 16px;}
-.ntf{width:100%;background:var(--w2);border-radius:20px;padding:16px 18px;display:flex;align-items:center;gap:12px;box-shadow:0 4px 24px rgba(0,0,0,.4);pointer-events:all;transform:translateY(110%) scale(.96);opacity:0;transition:transform .42s cubic-bezier(.34,1.56,.64,1),opacity .3s ease;position:relative;overflow:hidden;border:1px solid var(--br);}
-.ntf.in{transform:translateY(0) scale(1);opacity:1;}
-.ntf.out{transform:translateY(30px) scale(.96);opacity:0;transition:transform .28s ease,opacity .22s ease;}
-.ntf::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;border-radius:20px 0 0 20px;}
-.ntf.ok::before{background:#16a34a;}.ntf.err::before{background:var(--R);}.ntf.warn::before{background:#d97706;}.ntf.info::before{background:#2563eb;}
-.ntf-ico{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.ntf.ok .ntf-ico{background:rgba(22,163,74,.15);color:#16a34a;}
-.ntf.err .ntf-ico{background:rgba(232,25,44,.15);color:var(--R);}
-.ntf.warn .ntf-ico{background:rgba(217,119,6,.15);color:#d97706;}
-.ntf.info .ntf-ico{background:rgba(37,99,235,.15);color:#2563eb;}
-.ntf-ck{stroke-dasharray:22;stroke-dashoffset:22;animation:ntfCkDraw .38s .18s ease forwards;}
-@keyframes ntfCkDraw{to{stroke-dashoffset:0;}}
-.ntf-body{flex:1;min-width:0;}
-.ntf-ttl{font-size:14px;font-weight:800;color:var(--t);}
-.ntf-sub{font-size:12px;color:var(--t2);margin-top:2px;}
-.ntf-prog-wrap{position:absolute;bottom:0;left:4px;right:0;height:2px;background:var(--br);overflow:hidden;}
-.ntf-prog{height:100%;transform-origin:left;animation:ntfProg var(--nd,3.2s) .1s linear forwards;}
-@keyframes ntfProg{to{transform:scaleX(0);}}
-.ntf.ok .ntf-prog{background:#16a34a;}.ntf.err .ntf-prog{background:var(--R);}
-.ntf.warn .ntf-prog{background:#d97706;}.ntf.info .ntf-prog{background:#2563eb;}
+/* ── Global Popup Alert ──────────────────────────────────── */
+#popAlert{display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.55);backdrop-filter:blur(5px);align-items:center;justify-content:center;padding:20px;}
+#popAlert.on{display:flex;}
+.pa-box{background:#fff;border-radius:28px;width:100%;max-width:320px;padding:40px 28px 32px;text-align:center;box-shadow:0 32px 80px rgba(0,0,0,.45);position:relative;transform:scale(.84) translateY(16px);opacity:0;transition:transform .38s cubic-bezier(.34,1.56,.64,1),opacity .28s ease;}
+#popAlert.on .pa-box{transform:scale(1) translateY(0);opacity:1;}
+.pa-icon{width:90px;height:90px;border-radius:50%;margin:0 auto 22px;display:flex;align-items:center;justify-content:center;position:relative;}
+.pa-icon::before{content:'';position:absolute;inset:-6px;border-radius:50%;border:3px solid currentColor;opacity:.25;transform:scale(0);animation:paRing .4s .05s cubic-bezier(.34,1.56,.64,1) forwards;}
+@keyframes paRing{to{transform:scale(1);opacity:1;}}
+.pa-icon.ok{background:rgba(22,163,74,.12);color:#16a34a;}
+.pa-icon.err{background:rgba(232,25,44,.1);color:#e8192c;}
+.pa-icon.warn{background:rgba(217,119,6,.1);color:#d97706;}
+.pa-icon.info{background:rgba(37,99,235,.1);color:#2563eb;}
+.pa-icon.loading{background:rgba(37,99,235,.1);color:#2563eb;}
+.pa-spin{animation:paSpin .8s linear infinite;}
+@keyframes paSpin{to{transform:rotate(360deg);}}
+.pa-ck{stroke-dasharray:28;stroke-dashoffset:28;animation:paCkDraw .45s .15s ease forwards;}
+@keyframes paCkDraw{to{stroke-dashoffset:0;}}
+.pa-title{font-size:22px;font-weight:900;color:#0f172a;margin-bottom:8px;}
+.pa-sub{font-size:14px;color:#475569;line-height:1.5;}
+.pa-bar{height:3px;background:#e8ecf0;border-radius:3px;margin-top:24px;overflow:hidden;}
+.pa-prog{height:100%;border-radius:3px;transform-origin:left;animation:paDrain var(--pd,3s) .1s linear forwards;}
+@keyframes paDrain{to{transform:scaleX(0);}}
+/* legacy ntfWrap hidden */
+#ntfWrap{display:none!important;}
 /* SUCCESS POPUP */
 .spov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:800;align-items:center;justify-content:center;backdrop-filter:blur(6px);}
 .spov.on{display:flex;}
@@ -158,10 +161,10 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 .btn-cfm:active{transform:scale(.97);}
 .btn-cxl{width:100%;background:var(--bg3);border:1px solid var(--br);color:var(--t2);font-weight:700;font-size:15px;padding:13px;border-radius:14px;cursor:pointer;}
 /* SLIDER */
-.slw{position:relative;overflow:hidden;touch-action:pan-y;width:100%;display:block;}
-.sltr{display:flex;will-change:transform;width:100%;}
-.slide{min-width:100%;width:100%;height:184px;flex-shrink:0;overflow:hidden;}
-.slide img{width:100%;height:100%;object-fit:cover;}
+.slw{position:relative;overflow:hidden;touch-action:pan-y;width:100%;}
+.sltr{display:flex;will-change:transform;}
+.slide{min-width:100%;flex-shrink:0;overflow:hidden;aspect-ratio:16/7;}
+.slide img{width:100%;height:100%;object-fit:cover;display:block;}
 .slph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;}
 .slt{font-size:22px;font-weight:900;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.5);}
 .sls{font-size:12px;color:rgba(255,255,255,.85);background:rgba(0,0,0,.35);padding:4px 14px;border-radius:20px;}
@@ -489,33 +492,6 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 #pCof{background:var(--bg);}
 #pCof .rcard{margin:0;}
 
-/* ══ AUTH MODAL POPUP ══ */
-#authModal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:900;align-items:center;justify-content:center;backdrop-filter:blur(6px);padding:16px;}
-#authModal.on{display:flex;}
-.amod-box{background:#fff;border-radius:20px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,.3);position:relative;overflow:hidden;transform:scale(.9);opacity:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .25s ease;max-height:90vh;overflow-y:auto;}
-#authModal.on .amod-box{transform:scale(1);opacity:1;}
-.amod-close{position:absolute;top:14px;right:14px;background:var(--bg3);border:1px solid var(--br);color:var(--t2);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;font-weight:700;line-height:1;}
-.amod-close:hover{background:var(--br);}
-.amod-tabs{display:flex;border-bottom:2px solid var(--br);background:#fff;}
-.amod-tab{flex:1;padding:16px;border:none;background:transparent;font-size:14px;font-weight:700;color:var(--t3);cursor:pointer;position:relative;transition:color .2s;font-family:inherit;}
-.amod-tab.on{color:var(--R);}
-.amod-tab.on::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--R);border-radius:2px;}
-.amod-body{padding:24px;}
-.amod-title{font-size:20px;font-weight:900;color:var(--t);margin-bottom:4px;}
-.amod-sub{font-size:12px;color:var(--t3);margin-bottom:20px;}
-.amod-field{border:1.5px solid var(--br);border-radius:12px;padding:12px 14px;font-size:14px;color:var(--t);background:var(--bg3);width:100%;margin-bottom:12px;outline:none;transition:border-color .18s;font-family:inherit;}
-.amod-field:focus{border-color:var(--R);background:#fff;}
-.amod-btn{width:100%;background:var(--R);border:none;color:#fff;font-weight:800;font-size:15px;padding:14px;border-radius:12px;cursor:pointer;box-shadow:var(--sR);transition:transform .15s;font-family:inherit;margin-top:4px;}
-.amod-btn:active{transform:scale(.97);}
-.amod-divider{text-align:center;font-size:12px;color:var(--t3);margin:14px 0;}
-.amod-social{display:flex;gap:10px;}
-.amod-soc-btn{flex:1;border:1.5px solid var(--br);background:#fff;border-radius:10px;padding:10px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:600;color:var(--t);cursor:pointer;font-family:inherit;transition:background .15s;}
-.amod-soc-btn:hover{background:var(--bg3);}
-.amod-soc-btn.line-btn{background:#06C755;border-color:#06C755;color:#fff;}
-.amod-soc-btn.line-btn:hover{background:#05b34d;}
-.amod-sw{text-align:center;font-size:12px;color:var(--t3);margin-top:14px;}
-.amod-sw b{color:var(--R);cursor:pointer;}
-
 
 /* ══ DESKTOP LAYOUT ══ */
 #dsk-header{display:none;}
@@ -524,9 +500,10 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 
 /* Carousel banner */
 .slw{position:relative;overflow:hidden;touch-action:pan-y;}
-.slw.carousel-mode .sltr{display:flex;align-items:center;gap:0;will-change:transform;transition:transform .5s cubic-bezier(.4,0,.2,1);}
-.slw.carousel-mode .slide{min-width:60%;height:220px;flex-shrink:0;border-radius:16px;overflow:hidden;transition:opacity .4s,filter .4s,transform .4s;opacity:.45;filter:blur(1.5px) brightness(.7);transform:scale(.92);cursor:pointer;}
-.slw.carousel-mode .slide.active{opacity:1;filter:none;transform:scale(1);cursor:default;}
+.slw.carousel-mode{overflow:visible;}
+.slw.carousel-mode .sltr{display:flex;align-items:center;will-change:transform;transition:transform .6s cubic-bezier(.4,0,.2,1);}
+.slw.carousel-mode .slide{flex-shrink:0;border-radius:16px;overflow:hidden;transition:opacity .4s,filter .4s,transform .4s;opacity:.4;filter:blur(2px) brightness(.65);transform:scale(.88);cursor:pointer;}
+.slw.carousel-mode .slide.c-active{opacity:1!important;filter:none!important;transform:scale(1)!important;cursor:default;}
 
 @media(min-width:900px){
   :root{--bot:0px;--nav:64px;}
@@ -567,8 +544,8 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
   #pH,#pG,#pD,#pR,#pA,#pP,#pHist,#pHelp,#pWallet{padding-bottom:48px;}
 
   /* Carousel on desktop */
-  .slw.carousel-mode{padding:24px 0;background:var(--bg);}
-  .slw.carousel-mode .slide{min-width:55%;height:280px;}
+  .slw.carousel-mode{padding:24px 0 28px;background:var(--bg);overflow:hidden;}
+  .slw.carousel-mode .slide{width:56%;min-width:56%;height:290px;}
 
   /* Grids */
   .pgrid{grid-template-columns:repeat(6,1fr)!important;}
@@ -580,6 +557,33 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
   /* Sheets center */
   .shov,.eov{align-items:center;justify-content:center;}
   .sheet,.esheet{border-radius:20px!important;max-width:520px;max-height:80vh;}
+}
+
+/* ── Auth Modal (all devices) ───────────────────────── */
+#dsk-auth-modal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;}
+#dsk-auth-modal.on{display:flex!important;}
+.dam-box{background:var(--bg2);border-radius:20px;width:100%;max-width:400px;padding:28px 22px 24px;box-shadow:0 24px 64px rgba(0,0,0,.5);position:relative;border:1px solid var(--br);max-height:92vh;overflow-y:auto;}
+.dam-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:var(--t3);cursor:pointer;line-height:1;}
+.dam-tabs{display:flex;border-bottom:1.5px solid var(--br);margin-bottom:24px;}
+.dam-tab{flex:1;text-align:center;padding:10px;font-size:14px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:color .2s,border-color .2s;}
+.dam-tab.on{color:var(--R);border-bottom-color:var(--R);}
+.dam-title{font-size:18px;font-weight:900;color:var(--t);margin-bottom:4px;text-align:center;}
+.dam-sub{font-size:12px;color:var(--t3);text-align:center;margin-bottom:20px;}
+.dam-field{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1.5px solid var(--br);border-radius:12px;padding:0 14px;margin-bottom:12px;}
+.dam-field input{flex:1;background:none;border:none;outline:none;color:var(--t);font-size:14px;padding:13px 0;font-family:inherit;}
+.dam-field svg{color:var(--t3);flex-shrink:0;}
+.dam-btn{width:100%;padding:14px;border-radius:12px;background:var(--R);color:#fff;border:none;font-weight:700;font-size:15px;cursor:pointer;box-shadow:var(--sR);margin-top:4px;}
+.dam-btn:active{transform:scale(.97);}
+.dam-switch{text-align:center;font-size:12px;color:var(--t3);margin-top:14px;}
+.dam-switch b{color:var(--R);cursor:pointer;}
+.dam-err{font-size:11px;color:#e8192c;margin-top:-8px;margin-bottom:8px;display:none;}
+.dam-err.on{display:block;}
+
+@media(min-width:900px){
+  #dsk-header .dh-topupbtn{background:var(--bg3);border:1.5px solid var(--br);color:var(--t);padding:8px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
+  #dsk-header .dh-topupbtn:hover{background:var(--Rl);color:var(--R);}
+  #dsk-header .dh-regbtn{background:var(--bg3);border:1.5px solid var(--br);color:var(--t);padding:9px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;margin-left:6px;transition:background .15s;}
+  #dsk-header .dh-regbtn:hover{background:var(--bg3);}
 }
 </style>
 </head>
@@ -610,8 +614,14 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
         <span id="dh-bal">0 ກີບ</span>
       </div>
     </div>
+    <div id="dh-topupWrap" style="display:none">
+      <button class="dh-topupbtn" onclick="needAuth(()=>go('pWallet'))">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>ເຕີມເຄຣດິດ
+      </button>
+    </div>
     <div id="dh-loginWrap">
       <button class="dh-loginbtn" onclick="openAuthModal('login')">ເຂົ້າສູ່ລະບົບ</button>
+      <button class="dh-regbtn" onclick="openAuthModal('register')">ສະໝັກສະມາຊິກ</button>
     </div>
     <div id="dh-userWrap" style="display:none">
       <div class="dh-av" id="dh-av" onclick="go('profile');dhOn('dh-profile')" title="">U</div>
@@ -627,6 +637,15 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 </div>
 
 <div id="ntfWrap"></div>
+<!-- Global Popup Alert -->
+<div id="popAlert" onclick="if(event.target===this)closePopAlert()">
+  <div class="pa-box" id="paBox">
+    <div class="pa-icon ok" id="paIcon"></div>
+    <div class="pa-title" id="paTitle"></div>
+    <div class="pa-sub" id="paSub"></div>
+    <div class="pa-bar"><div class="pa-prog" id="paProg"></div></div>
+  </div>
+</div>
 <div class="dov" id="dov" onclick="cD()"></div>
 <div class="drw" id="drw">
   <button class="dc" onclick="cD()">&#10005;</button>
@@ -651,7 +670,7 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
   </div>
 </div>
 
-<div class="spov" id="spov"><div class="spbox"><div class="spring"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="var(--G)" stroke-width="2.5"><polyline class="spcheck" points="20 6 9 17 4 12"/></svg></div><div class="spt" id="spt"></div><div class="sps" id="sps"></div><div class="spbar"><div class="spprog"></div></div></div></div>
+<!-- spov replaced by popAlert -->
 
 <div class="pupov" id="pupov" onclick="closePup()">
   <div style="position:relative;width:85%;max-width:340px;" onclick="event.stopPropagation()">
@@ -804,97 +823,8 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
   <div style="height:20px"></div>
 </div>
 
-<!-- AUTH -->
-<div class="page auth-new" id="pA">
-  <div class="auth-bg-art">
-    <div class="auth-orb auth-orb1"></div>
-    <div class="auth-orb auth-orb2"></div>
-    <div class="auth-orb auth-orb3"></div>
-  </div>
-  <button class="auth-back-btn" onclick="go('home')">
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
-  </button>
-  <div class="auth-wrap">
-    <!-- BRAND -->
-    <div class="auth-brand">
-      <div class="auth-logo-text">
-        <span class="auth-logo-e">E</span><span class="auth-logo-asy">ASY</span><span class="auth-logo-space"> </span><span class="auth-logo-store">STORE</span>
-      </div>
-      <div class="auth-logo-line"></div>
-      <div class="auth-tagline">TOP UP · ທຸກເກມ · 24/7</div>
-    </div>
-    <!-- CARD -->
-    <div class="auth-card">
-      <!-- TAB INDICATOR -->
-      <div class="auth-tab-row">
-        <button class="auth-tab on" id="tL" onclick="aTab('login')">ເຂົ້າສູ່ລະບົບ</button>
-        <button class="auth-tab" id="tR" onclick="aTab('reg')">ສ້າງບັນຊີ</button>
-        <div class="auth-tab-slider" id="authSlider"></div>
-      </div>
-      <!-- LOGIN FORM -->
-      <div id="fL">
-        <div class="auth-field">
-          <div class="auth-field-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <input type="text" id="lE" placeholder="Email ຫຼື Username" autocomplete="username">
-        </div>
-        <div class="auth-field">
-          <div class="auth-field-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          </div>
-          <input type="password" id="lP" placeholder="ລະຫັດຜ່ານ" autocomplete="current-password">
-          <button class="auth-eye" onclick="togglePw('lP',this)" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-        </div>
-        <button class="auth-submit-btn" onclick="doLogin()">
-          ເຂົ້າສູ່ລະບົບ
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-        <div class="auth-switch">ຍັງບໍ່ມີບັນຊີ? <b onclick="aTab('reg')">ສ້າງໃໝ່ຟຣີ</b></div>
-      </div>
-      <!-- REGISTER FORM -->
-      <div id="fR" style="display:none">
-        <div class="auth-field">
-          <div class="auth-field-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-          </div>
-          <input type="text" id="rN" placeholder="ຊື່ (ຂັ້ນຕ່ຳ 5 ຕົວ)">
-        </div>
-        <div class="auth-field">
-          <div class="auth-field-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-          </div>
-          <input type="email" id="rE" placeholder="Email (@gmail.com)" autocomplete="email">
-        </div>
-        <div class="ferr" id="eE" style="margin:-8px 0 8px 0;padding-left:4px"></div>
-        <div class="auth-field">
-          <div class="auth-field-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          </div>
-          <input type="password" id="rP" placeholder="ລະຫັດຜ່ານ (6+ ຕົວ)" autocomplete="new-password">
-          <button class="auth-eye" onclick="togglePw('rP',this)" type="button">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-          </button>
-        </div>
-        <div class="ferr" id="eP" style="margin:-8px 0 8px 0;padding-left:4px"></div>
-        <div class="auth-field">
-          <div class="auth-field-icon">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-          </div>
-          <input type="password" id="rP2" placeholder="ຢືນຢັນລະຫັດຜ່ານ" autocomplete="new-password">
-        </div>
-        <div class="ferr" id="eP2" style="margin:-8px 0 8px 0;padding-left:4px"></div>
-        <button class="auth-submit-btn" onclick="doReg()">
-          ສ້າງບັນຊີ
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
-        </button>
-        <div class="auth-switch">ມີບັນຊີຢູ່ແລ້ວ? <b onclick="aTab('login')">ເຂົ້າສູ່ລະບົບ</b></div>
-      </div>
-    </div>
-  </div>
-</div>
+<!-- AUTH PAGE REMOVED - using modal popup only -->
+<div style="display:none!important" id="pA"></div>
 
 <!-- WALLET PAGE -->
 <div class="page" id="pWallet">
@@ -1115,7 +1045,7 @@ async function initDB(){
 
 let CU=null;
 const PID={home:'pH',games:'pG',detail:'pD',receipt:'pR',auth:'pA',profile:'pP',history:'pHist',help:'pHelp',pWallet:'pWallet',confirm:'pCof'};
-const PURL={home:'/',games:'/games',auth:'/login',profile:'/profile',history:'/history',help:'/contact',pWallet:'/wallet'};
+const PURL={home:'/',games:'/games',profile:'/profile',history:'/history',help:'/contact',pWallet:'/wallet'};
 function loadSess(){CU=S.g('sess');updNav();}
 function updNav(){updSidebar();
   const r1=document.getElementById('nR1'),r2=document.getElementById('nR2');
@@ -1136,9 +1066,7 @@ function updNav(){updSidebar();
     if(daw)daw.style.display='none';if(dlw)dlw.style.display='block';
   }
 }
-function needAuth(cb){if(CU){cb();return;}
-  openAuthModal('login');
-}
+function needAuth(cb){if(CU){cb();return;}openAuthModal('login');}
 function go(v,dir='enter'){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on','back'));
   document.getElementById('vAdm').style.display='none';
@@ -1172,21 +1100,60 @@ const _NTF_DUR=3200;
 const _ICONS={ok:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline class="ntf-ck" points="20 6 9 17 4 12"/></svg>`,err:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,warn:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/></svg>`,info:`<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/></svg>`};
 const _TTL={ok:'ສຳເລັດ!',err:'ຜິດພາດ!',warn:'ແຈ້ງເຕືອນ',info:'ແຈ້ງ'};
 function closeNtf(el){el.classList.add('out');clearTimeout(el._nt);setTimeout(()=>el.remove(),280);}
+// ── Unified Popup Alert System ───────────────────────────────
+let _paTimer=null;
+const PA_ICONS={
+  ok:`<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline class="pa-ck" points="20 6 9 17 4 12"/></svg>`,
+  err:`<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  warn:`<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><circle cx="12" cy="17" r=".5" fill="currentColor"/></svg>`,
+  info:`<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="16" r=".5" fill="currentColor"/></svg>`,
+  loading:`<svg class="pa-spin" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-opacity=".2"/><path d="M21 12a9 9 0 00-9-9"/></svg>`
+};
+const PA_COLORS={ok:'ok',err:'err',warn:'warn',info:'info',loading:'info'};
+const PA_TITLES={ok:'ສຳເລັດ!',err:'ຜິດພາດ!',warn:'ແຈ້ງເຕືອນ',info:'ຂໍ້ມູນ',loading:'ກຳລັງດຳເນີນການ...'};
+
+function showPopAlert(type, title, sub, dur, cb){
+  const ov=document.getElementById('popAlert');
+  const icon=document.getElementById('paIcon');
+  const prog=document.getElementById('paProg');
+  const t=type||'info';
+  const d=dur||3000;
+  icon.className='pa-icon '+PA_COLORS[t];
+  icon.innerHTML=PA_ICONS[t]||PA_ICONS.info;
+  document.getElementById('paTitle').textContent=title||PA_TITLES[t];
+  document.getElementById('paSub').textContent=sub||'';
+  // progress bar color
+  const progColors={ok:'#16a34a',err:'#e8192c',warn:'#d97706',info:'#2563eb',loading:'#2563eb'};
+  prog.style.background=progColors[t];
+  prog.style.animation='none';
+  prog.style.setProperty('--pd', d+'ms');
+  ov.classList.remove('on');
+  void ov.offsetWidth;
+  ov.classList.add('on');
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{prog.style.animation='';}));
+  clearTimeout(_paTimer);
+  if(t!=='loading'){
+    _paTimer=setTimeout(()=>{closePopAlert();if(cb)setTimeout(cb,200);}, d);
+  }
+}
+function closePopAlert(){
+  document.getElementById('popAlert').classList.remove('on');
+  clearTimeout(_paTimer);
+}
+function showLoading(msg){
+  showPopAlert('loading','ກຳລັງດຳເນີນການ...',msg||'',999999);
+}
+function hideLoading(){
+  closePopAlert();
+}
+
+// Map old toast -> new popup
 function toast(msg,type){
-  const t=type||'info';const wrap=document.getElementById('ntfWrap');
-  const all=wrap.querySelectorAll('.ntf');if(all.length>=3)closeNtf(all[0]);
-  const el=document.createElement('div');el.className='ntf '+t;el.style.setProperty('--nd',_NTF_DUR+'ms');
-  el.innerHTML=`<div class="ntf-ico">${_ICONS[t]||_ICONS.info}</div><div class="ntf-body"><div class="ntf-ttl">${_TTL[t]}</div>${msg&&msg!==_TTL[t]?`<div class="ntf-sub">${msg}</div>`:''}</div><div class="ntf-prog-wrap"><div class="ntf-prog"></div></div>`;
-  wrap.appendChild(el);requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('in')));
-  el._nt=setTimeout(()=>closeNtf(el),_NTF_DUR+200);
+  const t=type||'info';
+  showPopAlert(t, PA_TITLES[t]||msg, t!=='info'?msg:'', 3000);
 }
 function showSuccess(title,sub,cb){
-  const ov=document.getElementById('spov');
-  document.getElementById('spt').textContent=title;document.getElementById('sps').textContent=sub;
-  const box=ov.querySelector('.spbox'),prog=box.querySelector('.spprog');
-  box.style.animation='none';prog.style.animation='none';
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{box.style.animation='';prog.style.animation='';}));
-  ov.classList.add('on');clearTimeout(ov._t);ov._t=setTimeout(()=>{ov.classList.remove('on');if(cb)cb();},2300);
+  showPopAlert('ok', title||'ສຳເລັດ!', sub||'', 2500, cb);
 }
 
 /* POPUP */
@@ -1204,58 +1171,19 @@ function closePup(){const ov=document.getElementById('pupov');ov.classList.add('
 let SI=0,slTm=null,isDg=false,sX=0,cX=0;
 function rBanner(){
   const bans=S.g('bans')||[];const tr=document.getElementById('sltr'),dt=document.getElementById('sldots');if(!tr)return;tr.innerHTML='';dt.innerHTML='';
-  if(!bans.length)return;
-  function makeSlide(b){const s=document.createElement('div');s.className='slide';s.innerHTML=b.url&&b.url.startsWith('http')?`<img src="${b.url}" alt="" onerror="this.parentNode.innerHTML='<div class=slph style=background:${b.col}><div class=slt>${b.title}</div></div>'">`:`<div class="slph" style="background:${b.col}"><div class="slt">${b.title}</div><div class="sls">${b.sub||''}</div></div>`;return s;}
-  // Clone last before first, clone first after last for infinite
-  tr.appendChild(makeSlide(bans[bans.length-1])); // left clone
-  bans.forEach((b,i)=>{tr.appendChild(makeSlide(b));const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>gSlide(i);dt.appendChild(d);});
-  tr.appendChild(makeSlide(bans[0])); // right clone
-  const total=bans.length+2;
-  tr.style.width=(total*100)+'%';
-  tr.querySelectorAll('.slide').forEach(s=>{s.style.minWidth=(100/total)+'%';});
-  tr.style.transform=`translateX(-${100/total}%)`; // start at index 1 (first real slide)
-  SI=0;clearInterval(slTm);slTm=setInterval(()=>gSlide(SI+1),4500);setTimeout(initCarousel,50);
+  bans.forEach((b,i)=>{const s=document.createElement('div');s.className='slide';s.innerHTML=b.url&&b.url.startsWith('http')?`<img src="${b.url}" alt="" onerror="this.parentNode.innerHTML='<div class=slph style=background:${b.col}><div class=slt>${b.title}</div></div>'">`:`<div class="slph" style="background:${b.col}"><div class="slt">${b.title}</div><div class="sls">${b.sub||''}</div></div>`;tr.appendChild(s);const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>gSlide(i);dt.appendChild(d);});
+  SI=0;cIdx=1;cCount=0;cLock=false;
+  const trReset=document.getElementById('sltr');if(trReset){trReset.dataset.c='';trReset.style.transition='';}
+  clearInterval(slTm);clearInterval(cTimer);
+  slTm=setInterval(()=>gSlide(cIdx+1),4500);
+  setTimeout(initCarousel,80);
   const w=document.getElementById('slw');if(!w)return;const gX=e=>e.touches?e.touches[0].clientX:e.clientX;
   w.onmousedown=e=>{isDg=true;sX=gX(e);cX=sX;};w.ontouchstart=e=>{isDg=true;sX=gX(e);cX=sX;};
   w.onmousemove=e=>{if(isDg)cX=gX(e);};w.ontouchmove=e=>{if(isDg)cX=gX(e);};
   const end=()=>{if(isDg){isDg=false;if(Math.abs(sX-cX)>42)gSlide(SI+(sX-cX>0?1:-1));}};
   w.onmouseup=end;w.ontouchend=end;
 }
-function gSlide(n){
-  const bans=S.g('bans')||[];
-  const len=bans.length;if(!len)return;
-  const slw=document.getElementById('slw');
-  const isC=slw&&slw.classList.contains('carousel-mode');
-  if(isC){
-    // Infinite carousel: clone-based
-    SI=((n%len)+len)%len;
-    updCarousel();
-  } else {
-    // Mobile: infinite scroll using cloned slides
-    const tr=document.getElementById('sltr');
-    if(!tr)return;
-    const total=tr.children.length; // len + 2 clones
-    let realIdx=n;
-    // Move without transition when jumping clone
-    const moveTo=(idx,animate)=>{
-      if(!animate)tr.style.transition='none'; else tr.style.transition='';
-      tr.style.transform=`translateX(-${idx*(100/(total))}%)`;
-    };
-    // target index in cloned list (offset by 1 for left clone)
-    let target=n+1;
-    if(target<0)target=len;
-    if(target>len)target=1;
-    moveTo(target,true);
-    SI=((n%len)+len)%len;
-    // After transition, if on clone, jump silently
-    setTimeout(()=>{
-      if(target===0){moveTo(len,false);}
-      else if(target===len+1){moveTo(1,false);}
-    },350);
-  }
-  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===SI));
-}
-function slBy(d){gSlide(SI+d);}
+// gSlide handled below
 function TH(g,full){return g.img?`<img src="${g.img}" style="width:100%;height:100%;object-fit:cover">`:`<div style="width:100%;height:100%;background:${g.col};display:flex;align-items:center;justify-content:center;font-size:${full?'36px':'32px'}">${g.e||''}</div>`;}
 function rHome(){rBanner();rPop();rGrid('agH');}
 function rPop(){const gm=S.g('games')||[];const gr=document.getElementById('pgH');if(!gr)return;gr.innerHTML=gm.filter(g=>g.pop).slice(0,6).map(g=>`<div class="pc" onclick="openGame(${g.id})"><div class="pth">${TH(g,true)}<span class="bhot">HOT</span></div><div class="pname">${g.name}</div></div>`).join('');}
@@ -1343,7 +1271,7 @@ function openCof(){
   go('confirm');
 }
 function cCof(){go('detail','back');}
-async function doOrder(){
+async function doOrder(){showLoading('ກຳລັງສົ່ງຄຳສັ່ງ...');
   const uid=document.getElementById('uIn').value.trim();
   const gm=S.g('games')||[];const g=gm.find(x=>x.id===cGid);
   const pkgs=(S.g('pkgs')||{})[cGid]||[];const p=pkgs.find(x=>x.id===cPkg);
@@ -1427,7 +1355,7 @@ async function doReg(){
     toast('ລົ້ມເຫຼວ: '+e.message,'err');
   }
 }
-function doLogout(){if(!confirm('ອອກ?'))return;CU=null;S.d('sess');updNav();go('home','back');toast('ອອກຈາກລະບົບແລ້ວ','ok');}
+function doLogout(){if(!confirm('ອອກ?'))return;CU=null;_apiToken=null;S.d('sess');updNav();go('home','back');toast('ອອກຈາກລະບົບແລ້ວ','ok');}
 
 function rProf(){
   if(!CU)return;
@@ -1539,12 +1467,163 @@ async function loadAllUsers(){try{const d=await api('GET','/admin/users');S.s('u
 
 
 
+
+// ── Desktop Auth Modal ────────────────────────────────────────
+function isDesktop(){return window.innerWidth>=900;}
+function openAuthModal(tab){
+  // Use modal on ALL devices
+  document.getElementById('dsk-auth-modal').classList.add('on');
+  document.body.style.overflow='hidden';
+  damTab(tab||'login');
+}
+function closeAuthModal(){
+  document.getElementById('dsk-auth-modal').classList.remove('on');
+  document.body.style.overflow='';
+}
+function damTab(t){
+  document.getElementById('dam-login').style.display=t==='login'?'block':'none';
+  document.getElementById('dam-reg').style.display=t==='register'?'block':'none';
+  document.getElementById('dam-tL').classList.toggle('on',t==='login');
+  document.getElementById('dam-tR').classList.toggle('on',t==='register');
+}
+async function damLogin(){
+  const id=document.getElementById('dam-lE').value.trim();
+  const pw=document.getElementById('dam-lP').value;
+  const errEl=document.getElementById('dam-lErr');
+  errEl.classList.remove('on');
+  if(!id||!pw){toast('ກະລຸນາຕື່ມຂໍ້ມູນ','warn');return;}
+  showLoading('ກຳລັງກວດສອບ...');
+  try{
+    const res=await api('POST','/auth/login',{identifier:id,password:pw});
+    setToken(res.token);
+    hideLoading();
+    CU={name:res.user.name,email:res.user.email,role:res.user.role||'user',isAdmin:res.user.role==='admin',wallet:res.user.wallet||0,user_id:res.user.user_id||'-'};
+    S.s('sess',CU);updNav();closeAuthModal();
+    showSuccess('ສຳເລັດ!','ສະບາຍດີ '+CU.name,()=>{go('home');if(CU.isAdmin)setTimeout(openAdm,400);});
+  }catch(e){hideLoading();toast('ຂໍ້ມູນບໍ່ຖືກຕ້ອງ','err');}
+}
+async function damRegister(){
+  const name=document.getElementById('dam-rN').value.trim();
+  const email=document.getElementById('dam-rE').value.trim().toLowerCase();
+  const pw=document.getElementById('dam-rP').value;
+  const pw2=document.getElementById('dam-rP2').value;
+  const nErr=document.getElementById('dam-rNErr');
+  const eErr=document.getElementById('dam-rEErr');
+  const pErr=document.getElementById('dam-rPErr');
+  [nErr,eErr,pErr].forEach(e=>{e.classList.remove('on');});
+  let ok=true;
+  if(name.length<5){nErr.textContent='ຊື່ຕ້ອງ 5 ຕົວຂຶ້ນໄປ';nErr.classList.add('on');ok=false;}
+  if(!email.endsWith('@gmail.com')){eErr.textContent='ຕ້ອງໃຊ້ @gmail.com';eErr.classList.add('on');ok=false;}
+  if(pw.length<6){pErr.textContent='ລະຫັດ 6 ຕົວຂຶ້ນໄປ';pErr.classList.add('on');ok=false;}
+  if(pw!==pw2){pErr.textContent='ລະຫັດບໍ່ກົງກັນ';pErr.classList.add('on');ok=false;}
+  if(!ok)return;
+  showLoading('ກຳລັງສ້າງບັນຊີ...');
+  try{
+    const res=await api('POST','/auth/register',{name,email,password:pw});
+    setToken(res.token);
+    CU={name:res.user.name,email:res.user.email,role:'user',isAdmin:false,wallet:0,user_id:res.user.user_id||'-'};
+    hideLoading();
+    S.s('sess',CU);updNav();closeAuthModal();
+    showSuccess('ສຳເລັດ!','ຍິນດີຕ້ອນຮັບ '+name,()=>go('home'));
+  }catch(e){hideLoading();toast(e.message,'err');}
+}
+
+// ── Infinite Carousel ─────────────────────────────────────────
+// ── Carousel (Infinite, correct) ─────────────────────────────
+// ── Infinite Carousel (no-jump method) ───────────────────────
+let cIdx=0, cCount=0, cLock=false, cTimer=null;
+
+function initCarousel(){
+  const slw=document.getElementById('slw');
+  if(!slw)return;
+  if(window.innerWidth>=900){
+    slw.classList.add('carousel-mode');
+    setupCarousel();
+  }else{
+    slw.classList.remove('carousel-mode');
+  }
+}
+
+function setupCarousel(){
+  const tr=document.getElementById('sltr');
+  if(!tr||tr.dataset.c==='1')return;
+  const slides=Array.from(tr.children);
+  if(!slides.length)return;
+  cCount=slides.length;
+  // Prepend clone of last, append clone of first
+  tr.insertBefore(slides[slides.length-1].cloneNode(true), slides[0]);
+  tr.appendChild(slides[0].cloneNode(true));
+  tr.dataset.c='1';
+  cIdx=1; // start at real first
+  cApply(false);
+}
+
+function cApply(anim){
+  const tr=document.getElementById('sltr');
+  const slw=document.getElementById('slw');
+  if(!tr||!slw)return;
+  const W=slw.offsetWidth;
+  const SW=W*0.56; // slide width 56%
+  const offset=(W-SW)/2;
+  const tx=-(cIdx*SW)+offset;
+  tr.style.willChange='transform';
+  if(!anim){
+    tr.style.transition='none';
+    tr.style.transform=`translateX(${tx}px)`;
+    void tr.offsetWidth; // reflow
+    tr.style.transition='transform 0.55s cubic-bezier(0.4,0,0.2,1)';
+  } else {
+    tr.style.transform=`translateX(${tx}px)`;
+  }
+  // Active class
+  tr.querySelectorAll('.slide').forEach((s,i)=>{
+    s.classList.toggle('c-active', i===cIdx);
+  });
+  // Dots
+  const bans=S.g('bans')||[];
+  const realIdx=((cIdx-1)%cCount+cCount)%cCount;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===realIdx));
+}
+
+function gSlide(n){
+  const slw=document.getElementById('slw');
+  const isC=slw&&slw.classList.contains('carousel-mode');
+  const tr=document.getElementById('sltr');
+  const bans=S.g('bans')||[];
+  if(!isC){
+    SI=((n%bans.length)+bans.length)%bans.length;
+    if(tr)tr.style.transform=`translateX(-${SI*100}%)`;
+    document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===SI));
+    return;
+  }
+  if(cLock)return;
+  cLock=true;
+  cIdx=n;
+  cApply(true);
+  tr.addEventListener('transitionend', function done(){
+    tr.removeEventListener('transitionend',done);
+    cLock=false;
+    // Silent jump for infinite loop
+    if(cIdx>=cCount+1){ cIdx=1; cApply(false); }
+    else if(cIdx<=0){ cIdx=cCount; cApply(false); }
+  },{once:true});
+  setTimeout(()=>{cLock=false;},700);
+}
+
+function slBy(d){gSlide(cIdx+d);}
+window.addEventListener('resize',()=>{
+  initCarousel();
+  const slw=document.getElementById('slw');
+  if(slw&&slw.classList.contains('carousel-mode'))cApply(false);
+});
+
 // ── Desktop Header ───────────────────────────────────────────
 function dhOn(id){
   document.querySelectorAll('#dsk-header .dh-item').forEach(i=>i.classList.remove('on'));
   const el=document.getElementById(id);if(el)el.classList.add('on');
 }
 function updSidebar(){
+  const tw=document.getElementById('dh-topupWrap');
   const uw=document.getElementById('dh-userWrap');
   const lw=document.getElementById('dh-loginWrap');
   const aw=document.getElementById('dh-adminWrap');
@@ -1552,6 +1631,7 @@ function updSidebar(){
   if(!lw)return;
   if(CU){
     if(uw)uw.style.display='flex';
+    if(tw)tw.style.display='flex';
     if(lw)lw.style.display='none';
     if(ww)ww.style.display='flex';
     const av=document.getElementById('dh-av');
@@ -1561,86 +1641,14 @@ function updSidebar(){
     if(aw)aw.style.display=CU.isAdmin?'flex':'none';
   }else{
     if(uw)uw.style.display='none';
+    if(tw)tw.style.display='none';
     if(lw)lw.style.display='flex';
     if(ww)ww.style.display='none';
     if(aw)aw.style.display='none';
   }
 }
 
-// ── Carousel Banner ───────────────────────────────────────────
-function initCarousel(){
-  const isDesk=window.innerWidth>=900;
-  const slw=document.getElementById('slw');
-  if(!slw)return;
-  if(isDesk){slw.classList.add('carousel-mode');}
-  else{slw.classList.remove('carousel-mode');}
-  updCarousel();
-}
-function updCarousel(){
-  const slw=document.getElementById('slw');
-  if(!slw||!slw.classList.contains('carousel-mode'))return;
-  const slides=slw.querySelectorAll('.slide');
-  const n=slides.length;if(!n)return;
-  slides.forEach((s,i)=>{
-    s.classList.remove('active');
-    let diff=(i-SI+n)%n;
-    if(diff>n/2)diff-=n;
-    if(diff===0){s.classList.add('active');}
-  });
-  const tr=document.getElementById('sltr');
-  if(tr)tr.style.transform=`translateX(calc(-${SI*60}% + 20%))`;
-}
-window.addEventListener('resize',initCarousel);
-
-
-/* ── AUTH MODAL (Desktop Popup) ── */
-function openAuthModal(tab){
-  const modal=document.getElementById('authModal');
-  modal.classList.add('on');
-  amodTab(tab||'login');
-  // close on backdrop click
-  modal.onclick=(e)=>{if(e.target===modal)closeAuthModal();};
-}
-function closeAuthModal(){
-  document.getElementById('authModal').classList.remove('on');
-}
-function amodTab(t){
-  document.getElementById('amodTL').classList.toggle('on',t==='login');
-  document.getElementById('amodTR').classList.toggle('on',t==='reg');
-  document.getElementById('amodLogin').style.display=t==='login'?'block':'none';
-  document.getElementById('amodReg').style.display=t==='reg'?'block':'none';
-}
-async function doLoginModal(){
-  const e=document.getElementById('amodLE').value.trim();
-  const p=document.getElementById('amodLP').value;
-  if(!e||!p){toast('ກະລຸນາກອກຂໍ້ມູນໃຫ້ຄົບ','warn');return;}
-  try{
-    const d=await api('POST','/auth/login',{email:e,password:p});
-    if(d.token)setToken(d.token);
-    CU={...d.user};S.s('sess',CU);updNav();
-    closeAuthModal();
-    toast('ເຂົ້າສູ່ລະບົບສຳເລັດ! 👋','ok');
-  }catch(err){toast(err.message||'ເຂົ້າສູ່ລະບົບບໍ່ສຳເລັດ','err');}
-}
-async function doRegModal(){
-  const n=document.getElementById('amodRN').value.trim();
-  const e=document.getElementById('amodRE').value.trim();
-  const p=document.getElementById('amodRP').value;
-  const p2=document.getElementById('amodRP2').value;
-  const errEl=document.getElementById('amodRegErr');
-  errEl.style.display='none';
-  if(n.length<5){errEl.textContent='ຊື່ຕ້ອງຢ່າງໜ້ອຍ 5 ຕົວອັກສອນ';errEl.style.display='block';return;}
-  if(!e.includes('@')){errEl.textContent='Email ບໍ່ຖືກຕ້ອງ';errEl.style.display='block';return;}
-  if(p.length<6){errEl.textContent='ລະຫັດຜ່ານຢ່າງໜ້ອຍ 6 ຕົວ';errEl.style.display='block';return;}
-  if(p!==p2){errEl.textContent='ລະຫັດຜ່ານບໍ່ຕົງກັນ';errEl.style.display='block';return;}
-  try{
-    const d=await api('POST','/auth/register',{name:n,email:e,password:p});
-    if(d.token)setToken(d.token);
-    CU={...d.user};S.s('sess',CU);updNav();
-    closeAuthModal();
-    toast('ສ້າງບັນຊີສຳເລັດ! ຍິນດີຕ້ອນຮັບ 🎉','ok');
-  }catch(err){errEl.textContent=err.message||'ສ້າງບັນຊີບໍ່ສຳເລັດ';errEl.style.display='block';}
-}
+// Carousel handled above
 
 window.onload=async()=>{
   await initDB();loadSess();
@@ -1651,6 +1659,8 @@ window.onload=async()=>{
   const p = window.location.pathname;
   const urlMap={'/':'home','/games':'games','/profile':'profile','/history':'history','/contact':'help','/wallet':'pWallet'};
   let startPage = urlMap[p] || 'home';
+  // If URL is /login, redirect to home and open modal
+  if(p === '/login'){ window.history.replaceState(null,'','/'); setTimeout(()=>openAuthModal('login'),400); }
   // Handle /game/xxx paths
   if(p.startsWith('/game/')){
     const slug = p.replace('/game/','');
@@ -1668,51 +1678,59 @@ window.addEventListener('popstate',(e)=>{
   go(page,'back');
 });
 </script>
-<!-- AUTH MODAL POPUP (Desktop) -->
-<div id="authModal">
-  <div class="amod-box">
-    <button class="amod-close" onclick="closeAuthModal()">&#x2715;</button>
-    <div class="amod-tabs">
-      <button class="amod-tab on" id="amodTL" onclick="amodTab('login')">ເຂົ້າສູ່ລະບົບ</button>
-      <button class="amod-tab" id="amodTR" onclick="amodTab('reg')">ສະໝັກສະມາຊິກ</button>
+</div><!-- /dsk-main -->
+
+<!-- DESKTOP AUTH MODAL -->
+<div id="dsk-auth-modal" onclick="if(event.target===this)closeAuthModal()">
+  <div class="dam-box">
+    <button class="dam-close" onclick="closeAuthModal()">&#10005;</button>
+    <div class="dam-tabs">
+      <div class="dam-tab on" id="dam-tL" onclick="damTab('login')">ເຂົ້າສູ່ລະບົບ</div>
+      <div class="dam-tab" id="dam-tR" onclick="damTab('register')">ສະໝັກສະມາຊິກ</div>
     </div>
     <!-- LOGIN -->
-    <div class="amod-body" id="amodLogin">
-      <div class="amod-title">ຍິນດີຕ້ອນຮັບກັບມາ!</div>
-      <div class="amod-sub">ກອກຂໍ້ມູນເພື່ອເຂົ້າໃຊ້ງານບັນຊີຂອງທ່ານ</div>
-      <div style="font-size:12px;font-weight:700;color:var(--t2);margin-bottom:6px">ຊື່ຜູ້ໃຊ້ ຫຼື Email</div>
-      <input class="amod-field" type="text" id="amodLE" placeholder="Username / Email" autocomplete="username">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span style="font-size:12px;font-weight:700;color:var(--t2)">ລະຫັດຜ່ານ</span><span style="font-size:11px;color:var(--R);cursor:pointer">ລືມລະຫັດຜ່ານ?</span></div>
-      <input class="amod-field" type="password" id="amodLP" placeholder="••••••••" autocomplete="current-password">
-      <button class="amod-btn" onclick="doLoginModal()">ເຂົ້າສູ່ລະບົບ</button>
-      <div class="amod-divider">ຫຼືເຂົ້າສູ່ລະບົບດ້ວຍ</div>
-      <div class="amod-social">
-        <button class="amod-soc-btn" onclick="toast('Google login coming soon','info')">
-          <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-          Google
-        </button>
-        <button class="amod-soc-btn line-btn" onclick="toast('LINE login coming soon','info')">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.078 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>
-          LINE
-        </button>
+    <div id="dam-login">
+      <div class="dam-title">ຍິນດີຕ້ອນຮັບກັບມາ!</div>
+      <div class="dam-sub">ໃສ່ຊື່ຜູ້ໃຊ້ ຫຼື Email</div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <input type="text" id="dam-lE" placeholder="Username / Email">
       </div>
-      <div class="amod-sw">ຍັງບໍ່ມີບັນຊີ? <b onclick="amodTab('reg')">ສ້າງໃໝ່ຟຣີ</b></div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <input type="password" id="dam-lP" placeholder="ລະຫັດຜ່ານ">
+      </div>
+      <div class="dam-err" id="dam-lErr"></div>
+      <button class="dam-btn" onclick="damLogin()">ເຂົ້າສູ່ລະບົບ</button>
+      <div class="dam-switch">ຍັງບໍ່ມີບັນຊີ? <b onclick="damTab('register')">ສະໝັກສະມາຊິກ</b></div>
     </div>
     <!-- REGISTER -->
-    <div class="amod-body" id="amodReg" style="display:none">
-      <div class="amod-title">ສ້າງບັນຊີໃໝ່</div>
-      <div class="amod-sub">ສ່ວນຫຼຸດ & ໂປຣໂມຊັ່ນພິເສດສຳລັບສະມາຊິກ</div>
-      <input class="amod-field" type="text" id="amodRN" placeholder="ຊື່ (ຂັ້ນຕ່ຳ 5 ຕົວ)">
-      <input class="amod-field" type="email" id="amodRE" placeholder="Email (@gmail.com)" autocomplete="email">
-      <input class="amod-field" type="password" id="amodRP" placeholder="ລະຫັດຜ່ານ (6+ ຕົວ)" autocomplete="new-password">
-      <input class="amod-field" type="password" id="amodRP2" placeholder="ຢືນຢັນລະຫັດຜ່ານ" autocomplete="new-password">
-      <div id="amodRegErr" style="font-size:12px;color:var(--R);margin:-6px 0 8px;display:none"></div>
-      <button class="amod-btn" onclick="doRegModal()">ສ້າງບັນຊີ</button>
-      <div class="amod-sw">ມີບັນຊີຢູ່ແລ້ວ? <b onclick="amodTab('login')">ເຂົ້າສູ່ລະບົບ</b></div>
+    <div id="dam-reg" style="display:none">
+      <div class="dam-title">ສ້າງບັນຊີໃໝ່</div>
+      <div class="dam-sub">ສະໝັກໄດ້ຟຣີ!</div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <input type="text" id="dam-rN" placeholder="ຊື່ຜູ້ໃຊ້ (5 ຕົວຂຶ້ນໄປ)">
+      </div>
+      <div class="dam-err" id="dam-rNErr"></div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <input type="email" id="dam-rE" placeholder="Email (@gmail.com)">
+      </div>
+      <div class="dam-err" id="dam-rEErr"></div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <input type="password" id="dam-rP" placeholder="ລະຫັດຜ່ານ (6 ຕົວຂຶ້ນໄປ)">
+      </div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <input type="password" id="dam-rP2" placeholder="ຢືນຢັນລະຫັດຜ່ານ">
+      </div>
+      <div class="dam-err" id="dam-rPErr"></div>
+      <button class="dam-btn" onclick="damRegister()">ສະໝັກສະມາຊິກ</button>
+      <div class="dam-switch">ມີບັນຊີຢູ່ແລ້ວ? <b onclick="damTab('login')">ເຂົ້າສູ່ລະບົບ</b></div>
     </div>
   </div>
 </div>
-
-</div><!-- /dsk-main -->
 </body>
 </html>
