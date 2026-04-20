@@ -544,7 +544,7 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
   .slw.carousel-mode .slide{min-width:55%;height:280px;}
 
   /* Grids */
-  .pgrid{grid-template-columns:repeat(5,1fr)!important;}
+  .pgrid{grid-template-columns:repeat(6,1fr)!important;}
   .agrid{grid-template-columns:repeat(6,1fr)!important;}
 
   /* Notif */
@@ -553,6 +553,33 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
   /* Sheets center */
   .shov,.eov{align-items:center;justify-content:center;}
   .sheet,.esheet{border-radius:20px!important;max-width:520px;max-height:80vh;}
+}
+
+/* ── Desktop Auth Modal ─────────────────────────────── */
+#dsk-auth-modal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;}
+#dsk-auth-modal.on{display:flex!important;}
+.dam-box{background:var(--bg2);border-radius:20px;width:100%;max-width:400px;padding:32px 28px 28px;box-shadow:0 24px 64px rgba(0,0,0,.4);position:relative;border:1px solid var(--br);}
+.dam-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:var(--t3);cursor:pointer;line-height:1;}
+.dam-tabs{display:flex;border-bottom:1.5px solid var(--br);margin-bottom:24px;}
+.dam-tab{flex:1;text-align:center;padding:10px;font-size:14px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:color .2s,border-color .2s;}
+.dam-tab.on{color:var(--R);border-bottom-color:var(--R);}
+.dam-title{font-size:18px;font-weight:900;color:var(--t);margin-bottom:4px;text-align:center;}
+.dam-sub{font-size:12px;color:var(--t3);text-align:center;margin-bottom:20px;}
+.dam-field{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1.5px solid var(--br);border-radius:12px;padding:0 14px;margin-bottom:12px;}
+.dam-field input{flex:1;background:none;border:none;outline:none;color:var(--t);font-size:14px;padding:13px 0;font-family:inherit;}
+.dam-field svg{color:var(--t3);flex-shrink:0;}
+.dam-btn{width:100%;padding:14px;border-radius:12px;background:var(--R);color:#fff;border:none;font-weight:700;font-size:15px;cursor:pointer;box-shadow:var(--sR);margin-top:4px;}
+.dam-btn:active{transform:scale(.97);}
+.dam-switch{text-align:center;font-size:12px;color:var(--t3);margin-top:14px;}
+.dam-switch b{color:var(--R);cursor:pointer;}
+.dam-err{font-size:11px;color:#e8192c;margin-top:-8px;margin-bottom:8px;display:none;}
+.dam-err.on{display:block;}
+
+@media(min-width:900px){
+  #dsk-header .dh-topupbtn{background:var(--bg3);border:1.5px solid var(--br);color:var(--t);padding:8px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;gap:6px;transition:background .15s;}
+  #dsk-header .dh-topupbtn:hover{background:var(--Rl);color:var(--R);}
+  #dsk-header .dh-regbtn{background:var(--bg3);border:1.5px solid var(--br);color:var(--t);padding:9px 16px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;margin-left:6px;transition:background .15s;}
+  #dsk-header .dh-regbtn:hover{background:var(--bg3);}
 }
 </style>
 </head>
@@ -583,8 +610,14 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
         <span id="dh-bal">0 ກີບ</span>
       </div>
     </div>
+    <div id="dh-topupWrap" style="display:none">
+      <button class="dh-topupbtn" onclick="needAuth(()=>go('pWallet'))">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>ເຕີມເຄຣດິດ
+      </button>
+    </div>
     <div id="dh-loginWrap">
-      <button class="dh-loginbtn" onclick="go('auth')">ເຂົ້າສູ່ລະບົບ</button>
+      <button class="dh-loginbtn" onclick="openAuthModal('login')">ເຂົ້າສູ່ລະບົບ</button>
+      <button class="dh-regbtn" onclick="openAuthModal('register')">ສະໝັກສະມາຊິກ</button>
     </div>
     <div id="dh-userWrap" style="display:none">
       <div class="dh-av" id="dh-av" onclick="go('profile');dhOn('dh-profile')" title="">U</div>
@@ -1176,7 +1209,7 @@ let SI=0,slTm=null,isDg=false,sX=0,cX=0;
 function rBanner(){
   const bans=S.g('bans')||[];const tr=document.getElementById('sltr'),dt=document.getElementById('sldots');if(!tr)return;tr.innerHTML='';dt.innerHTML='';
   bans.forEach((b,i)=>{const s=document.createElement('div');s.className='slide';s.innerHTML=b.url&&b.url.startsWith('http')?`<img src="${b.url}" alt="" onerror="this.parentNode.innerHTML='<div class=slph style=background:${b.col}><div class=slt>${b.title}</div></div>'">`:`<div class="slph" style="background:${b.col}"><div class="slt">${b.title}</div><div class="sls">${b.sub||''}</div></div>`;tr.appendChild(s);const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>gSlide(i);dt.appendChild(d);});
-  SI=0;clearInterval(slTm);slTm=setInterval(()=>gSlide(SI+1),4500);setTimeout(initCarousel,50);
+  SI=0;clearInterval(slTm);slTm=setInterval(()=>gSlide(SI+1),4500);setTimeout(initCarousel,100);
   const w=document.getElementById('slw');if(!w)return;const gX=e=>e.touches?e.touches[0].clientX:e.clientX;
   w.onmousedown=e=>{isDg=true;sX=gX(e);cX=sX;};w.ontouchstart=e=>{isDg=true;sX=gX(e);cX=sX;};
   w.onmousemove=e=>{if(isDg)cX=gX(e);};w.ontouchmove=e=>{if(isDg)cX=gX(e);};
@@ -1468,12 +1501,142 @@ async function loadAllUsers(){try{const d=await api('GET','/admin/users');S.s('u
 
 
 
+
+// ── Desktop Auth Modal ────────────────────────────────────────
+function isDesktop(){return window.innerWidth>=900;}
+function openAuthModal(tab){
+  if(!isDesktop()){go('auth');return;}
+  document.getElementById('dsk-auth-modal').classList.add('on');
+  damTab(tab||'login');
+}
+function closeAuthModal(){
+  document.getElementById('dsk-auth-modal').classList.remove('on');
+}
+function damTab(t){
+  document.getElementById('dam-login').style.display=t==='login'?'block':'none';
+  document.getElementById('dam-reg').style.display=t==='register'?'block':'none';
+  document.getElementById('dam-tL').classList.toggle('on',t==='login');
+  document.getElementById('dam-tR').classList.toggle('on',t==='register');
+}
+async function damLogin(){
+  const id=document.getElementById('dam-lE').value.trim();
+  const pw=document.getElementById('dam-lP').value;
+  const errEl=document.getElementById('dam-lErr');
+  errEl.classList.remove('on');
+  if(!id||!pw){errEl.textContent='ກະລຸນາຕື່ມຂໍ້ມູນ';errEl.classList.add('on');return;}
+  try{
+    const res=await api('POST','/auth/login',{identifier:id,password:pw});
+    setToken(res.token);
+    CU={name:res.user.name,email:res.user.email,role:res.user.role||'user',isAdmin:res.user.role==='admin',wallet:res.user.wallet||0,user_id:res.user.user_id||'-'};
+    S.s('sess',CU);updNav();closeAuthModal();
+    showSuccess('ສຳເລັດ!','ສະບາຍດີ '+CU.name,()=>{go('home');if(CU.isAdmin)setTimeout(openAdm,400);});
+  }catch(e){errEl.textContent='ຂໍ້ມູນບໍ່ຖືກຕ້ອງ';errEl.classList.add('on');}
+}
+async function damRegister(){
+  const name=document.getElementById('dam-rN').value.trim();
+  const email=document.getElementById('dam-rE').value.trim().toLowerCase();
+  const pw=document.getElementById('dam-rP').value;
+  const pw2=document.getElementById('dam-rP2').value;
+  const nErr=document.getElementById('dam-rNErr');
+  const eErr=document.getElementById('dam-rEErr');
+  const pErr=document.getElementById('dam-rPErr');
+  [nErr,eErr,pErr].forEach(e=>{e.classList.remove('on');});
+  let ok=true;
+  if(name.length<5){nErr.textContent='ຊື່ຕ້ອງ 5 ຕົວຂຶ້ນໄປ';nErr.classList.add('on');ok=false;}
+  if(!email.endsWith('@gmail.com')){eErr.textContent='ຕ້ອງໃຊ້ @gmail.com';eErr.classList.add('on');ok=false;}
+  if(pw.length<6){pErr.textContent='ລະຫັດ 6 ຕົວຂຶ້ນໄປ';pErr.classList.add('on');ok=false;}
+  if(pw!==pw2){pErr.textContent='ລະຫັດບໍ່ກົງກັນ';pErr.classList.add('on');ok=false;}
+  if(!ok)return;
+  try{
+    const res=await api('POST','/auth/register',{name,email,password:pw});
+    setToken(res.token);
+    CU={name:res.user.name,email:res.user.email,role:'user',isAdmin:false,wallet:0,user_id:res.user.user_id||'-'};
+    S.s('sess',CU);updNav();closeAuthModal();
+    showSuccess('ສຳເລັດ!','ຍິນດີຕ້ອນຮັບ '+name,()=>go('home'));
+  }catch(e){pErr.textContent='ລົ້ມເຫຼວ: '+e.message;pErr.classList.add('on');}
+}
+
+// ── Infinite Carousel ─────────────────────────────────────────
+function initCarousel(){
+  const isDesk=window.innerWidth>=900;
+  const slw=document.getElementById('slw');
+  if(!slw)return;
+  if(isDesk){
+    slw.classList.add('carousel-mode');
+    buildInfiniteSlides();
+  }else{
+    slw.classList.remove('carousel-mode');
+  }
+  updCarousel();
+}
+function buildInfiniteSlides(){
+  const bans=S.g('bans')||[];
+  if(bans.length<2)return;
+  const tr=document.getElementById('sltr');
+  if(!tr||tr.dataset.infinite==='1')return;
+  // Clone first and last for infinite effect
+  const slides=Array.from(tr.children);
+  if(!slides.length)return;
+  const first=slides[0].cloneNode(true);
+  const last=slides[slides.length-1].cloneNode(true);
+  tr.appendChild(first);
+  tr.insertBefore(last,slides[0]);
+  tr.dataset.infinite='1';
+  // Start at real index 1 (after prepended clone)
+  SI=1;
+  tr.style.transition='none';
+  updCarousel();
+  setTimeout(()=>{if(tr)tr.style.transition='';},50);
+}
+function updCarousel(){
+  const slw=document.getElementById('slw');
+  if(!slw||!slw.classList.contains('carousel-mode'))return;
+  const tr=document.getElementById('sltr');
+  const slides=tr?tr.querySelectorAll('.slide'):[];
+  const n=slides.length;if(!n)return;
+  slides.forEach((s,i)=>{
+    s.classList.remove('active');
+    if(i===SI)s.classList.add('active');
+  });
+  if(tr)tr.style.transform=`translateX(calc(-${SI*60}% + 20%))`;
+}
+
+// Override gSlide for infinite
+const _origGSlide=window.gSlide;
+function gSlide(n){
+  const slw=document.getElementById('slw');
+  const isC=slw&&slw.classList.contains('carousel-mode');
+  const tr=document.getElementById('sltr');
+  const bans=S.g('bans')||[];
+  if(!isC){
+    SI=((n%bans.length)+bans.length)%bans.length;
+    if(tr)tr.style.transform=`translateX(-${SI*100}%)`;
+    document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===SI));
+    return;
+  }
+  // Infinite carousel mode
+  const total=tr?tr.querySelectorAll('.slide').length:bans.length;
+  SI=n;
+  updCarousel();
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===(SI-1+bans.length)%bans.length));
+  // Handle looping
+  if(tr){
+    tr.addEventListener('transitionend',function onEnd(){
+      tr.removeEventListener('transitionend',onEnd);
+      if(SI>=total-1){SI=1;tr.style.transition='none';updCarousel();setTimeout(()=>{tr.style.transition='';},30);}
+      else if(SI<=0){SI=total-2;tr.style.transition='none';updCarousel();setTimeout(()=>{tr.style.transition='';},30);}
+    },{once:true});
+  }
+}
+window.addEventListener('resize',initCarousel);
+
 // ── Desktop Header ───────────────────────────────────────────
 function dhOn(id){
   document.querySelectorAll('#dsk-header .dh-item').forEach(i=>i.classList.remove('on'));
   const el=document.getElementById(id);if(el)el.classList.add('on');
 }
 function updSidebar(){
+  const tw=document.getElementById('dh-topupWrap');
   const uw=document.getElementById('dh-userWrap');
   const lw=document.getElementById('dh-loginWrap');
   const aw=document.getElementById('dh-adminWrap');
@@ -1481,6 +1644,7 @@ function updSidebar(){
   if(!lw)return;
   if(CU){
     if(uw)uw.style.display='flex';
+    if(tw)tw.style.display='flex';
     if(lw)lw.style.display='none';
     if(ww)ww.style.display='flex';
     const av=document.getElementById('dh-av');
@@ -1490,6 +1654,7 @@ function updSidebar(){
     if(aw)aw.style.display=CU.isAdmin?'flex':'none';
   }else{
     if(uw)uw.style.display='none';
+    if(tw)tw.style.display='none';
     if(lw)lw.style.display='flex';
     if(ww)ww.style.display='none';
     if(aw)aw.style.display='none';
@@ -1548,5 +1713,58 @@ window.addEventListener('popstate',(e)=>{
 });
 </script>
 </div><!-- /dsk-main -->
+
+<!-- DESKTOP AUTH MODAL -->
+<div id="dsk-auth-modal" onclick="if(event.target===this)closeAuthModal()">
+  <div class="dam-box">
+    <button class="dam-close" onclick="closeAuthModal()">&#10005;</button>
+    <div class="dam-tabs">
+      <div class="dam-tab on" id="dam-tL" onclick="damTab('login')">ເຂົ້າສູ່ລະບົບ</div>
+      <div class="dam-tab" id="dam-tR" onclick="damTab('register')">ສະໝັກສະມາຊິກ</div>
+    </div>
+    <!-- LOGIN -->
+    <div id="dam-login">
+      <div class="dam-title">ຍິນດີຕ້ອນຮັບກັບມາ!</div>
+      <div class="dam-sub">ໃສ່ຊື່ຜູ້ໃຊ້ ຫຼື Email</div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <input type="text" id="dam-lE" placeholder="Username / Email">
+      </div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <input type="password" id="dam-lP" placeholder="ລະຫັດຜ່ານ">
+      </div>
+      <div class="dam-err" id="dam-lErr"></div>
+      <button class="dam-btn" onclick="damLogin()">ເຂົ້າສູ່ລະບົບ</button>
+      <div class="dam-switch">ຍັງບໍ່ມີບັນຊີ? <b onclick="damTab('register')">ສະໝັກສະມາຊິກ</b></div>
+    </div>
+    <!-- REGISTER -->
+    <div id="dam-reg" style="display:none">
+      <div class="dam-title">ສ້າງບັນຊີໃໝ່</div>
+      <div class="dam-sub">ສະໝັກໄດ້ຟຣີ!</div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <input type="text" id="dam-rN" placeholder="ຊື່ຜູ້ໃຊ້ (5 ຕົວຂຶ້ນໄປ)">
+      </div>
+      <div class="dam-err" id="dam-rNErr"></div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <input type="email" id="dam-rE" placeholder="Email (@gmail.com)">
+      </div>
+      <div class="dam-err" id="dam-rEErr"></div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <input type="password" id="dam-rP" placeholder="ລະຫັດຜ່ານ (6 ຕົວຂຶ້ນໄປ)">
+      </div>
+      <div class="dam-field">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+        <input type="password" id="dam-rP2" placeholder="ຢືນຢັນລະຫັດຜ່ານ">
+      </div>
+      <div class="dam-err" id="dam-rPErr"></div>
+      <button class="dam-btn" onclick="damRegister()">ສະໝັກສະມາຊິກ</button>
+      <div class="dam-switch">ມີບັນຊີຢູ່ແລ້ວ? <b onclick="damTab('login')">ເຂົ້າສູ່ລະບົບ</b></div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
