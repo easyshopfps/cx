@@ -162,9 +162,10 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 .btn-cxl{width:100%;background:var(--bg3);border:1px solid var(--br);color:var(--t2);font-weight:700;font-size:15px;padding:13px;border-radius:14px;cursor:pointer;}
 /* SLIDER */
 .slw{position:relative;overflow:hidden;touch-action:pan-y;}
-.sltr{display:flex;will-change:transform;}
-.slide{min-width:100%;height:184px;flex-shrink:0;overflow:hidden;}
-.slide img{width:100%;height:100%;object-fit:cover;}
+.sltr{display:flex;will-change:transform;transition:transform .45s cubic-bezier(.4,0,.2,1);}
+.slide{min-width:100%;width:100%;height:200px;flex-shrink:0;overflow:hidden;position:relative;}
+.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;}
+.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;}
 .slph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;}
 .slt{font-size:22px;font-weight:900;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.5);}
 .sls{font-size:12px;color:rgba(255,255,255,.85);background:rgba(0,0,0,.35);padding:4px 14px;border-radius:20px;}
@@ -563,9 +564,21 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 }
 
 /* ── Auth Modal (all devices) ───────────────────────── */
-#dsk-auth-modal{display:none;position:fixed;inset:0;z-index:9000;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;}
-#dsk-auth-modal.on{display:flex!important;}
-.dam-box{background:var(--bg2);border-radius:20px;width:100%;max-width:400px;padding:28px 22px 24px;box-shadow:0 24px 64px rgba(0,0,0,.5);position:relative;border:1px solid var(--br);max-height:92vh;overflow-y:auto;}
+#dsk-auth-modal{
+  display:none;position:fixed;inset:0;z-index:9000;
+  background:rgba(0,0,0,0);backdrop-filter:blur(0px);
+  align-items:center;justify-content:center;padding:16px;
+  transition:background .3s ease, backdrop-filter .3s ease;
+}
+#dsk-auth-modal.on{display:flex!important;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);}
+.dam-box{
+  background:var(--bg2);border-radius:20px;width:100%;max-width:400px;
+  padding:28px 22px 24px;box-shadow:0 24px 64px rgba(0,0,0,.5);
+  position:relative;border:1px solid var(--br);max-height:92vh;overflow-y:auto;
+  transform:scale(.9) translateY(20px);opacity:0;
+  transition:transform .35s cubic-bezier(.34,1.56,.64,1),opacity .25s ease;
+}
+#dsk-auth-modal.on .dam-box{transform:scale(1) translateY(0);opacity:1;}
 .dam-close{position:absolute;top:14px;right:16px;background:none;border:none;font-size:20px;color:var(--t3);cursor:pointer;line-height:1;}
 .dam-tabs{display:flex;border-bottom:1.5px solid var(--br);margin-bottom:24px;}
 .dam-tab{flex:1;text-align:center;padding:10px;font-size:14px;font-weight:700;color:var(--t3);cursor:pointer;border-bottom:2.5px solid transparent;margin-bottom:-1.5px;transition:color .2s,border-color .2s;}
@@ -1158,7 +1171,7 @@ function updNav(){updSidebar();
     if(daw)daw.style.display='none';if(dlw)dlw.style.display='block';
   }
 }
-function needAuth(cb){if(CU){cb();return;}openAuthModal('login');}
+function needAuth(cb){if(CU){cb();return;}showPopAlert('warn','ກະລຸນາເຂົ້າສູ່ລະບົບ','ກົດ "ເຂົ້າສູ່ລະບົບ" ເພື່ອດຳເນີນການ',3000);}
 function go(v,dir='enter'){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on','back'));
   document.getElementById('vAdm').style.display='none';
@@ -1260,22 +1273,66 @@ function showPopups(){
 function closePup(){const ov=document.getElementById('pupov');ov.classList.add('closing');setTimeout(()=>ov.classList.remove('on','closing'),500);}
 
 /* SLIDER */
-let SI=0,slTm=null,isDg=false,sX=0,cX=0;
+// ── Mobile Slider (clean, unified) ──────────────────────────
+let SI=0, slTm=null;
+let _touchX=0, _touchDX=0, _touching=false;
+
 function rBanner(){
-  const bans=S.g('bans')||[];const tr=document.getElementById('sltr'),dt=document.getElementById('sldots');if(!tr)return;tr.innerHTML='';dt.innerHTML='';
-  bans.forEach((b,i)=>{const s=document.createElement('div');s.className='slide';s.innerHTML=b.url&&b.url.startsWith('http')?`<img src="${b.url}" alt="" onerror="this.parentNode.innerHTML='<div class=slph style=background:${b.col}><div class=slt>${b.title}</div></div>'">`:`<div class="slph" style="background:${b.col}"><div class="slt">${b.title}</div><div class="sls">${b.sub||''}</div></div>`;tr.appendChild(s);const d=document.createElement('div');d.className='dot'+(i===0?' on':'');d.onclick=()=>gSlide(i);dt.appendChild(d);});
-  SI=0;cIdx=1;cCount=0;cLock=false;
-  const trReset=document.getElementById('sltr');if(trReset){trReset.dataset.c='';trReset.style.transition='';}
-  clearInterval(slTm);clearInterval(cTimer);
-  slTm=setInterval(()=>gSlide(cIdx+1),4500);
+  const bans=S.g('bans')||[];
+  const tr=document.getElementById('sltr'),dt=document.getElementById('sldots');
+  if(!tr)return;
+  tr.innerHTML='';dt.innerHTML='';
+  if(!bans.length)return;
+  bans.forEach((b,i)=>{
+    const s=document.createElement('div');
+    s.className='slide';
+    s.innerHTML=b.url&&b.url.startsWith('http')
+      ?`<img src="${b.url}" alt="" loading="lazy" onerror="this.parentNode.style.background='${b.col||'#e8192c'}';">`
+      :`<div class="slph" style="background:${b.col}"><div class="slt">${b.title}</div><div class="sls">${b.sub||''}</div></div>`;
+    tr.appendChild(s);
+    const d=document.createElement('div');
+    d.className='dot'+(i===0?' on':'');
+    d.onclick=()=>mobileSlide(i);
+    dt.appendChild(d);
+  });
+  SI=0;
+  // Reset carousel state
+  cIdx=1;cCount=0;cLock=false;
+  tr.dataset.c='';
+  tr.style.transition='none';
+  tr.style.transform='translateX(0)';
+  clearInterval(slTm);
+  slTm=setInterval(()=>{
+    const isDesk=window.innerWidth>=900;
+    if(isDesk)gSlide(cIdx+1);
+    else mobileSlide((SI+1)%(S.g('bans')||[]).length);
+  },4500);
   setTimeout(initCarousel,80);
-  const w=document.getElementById('slw');if(!w)return;const gX=e=>e.touches?e.touches[0].clientX:e.clientX;
-  w.onmousedown=e=>{isDg=true;sX=gX(e);cX=sX;};w.ontouchstart=e=>{isDg=true;sX=gX(e);cX=sX;};
-  w.onmousemove=e=>{if(isDg)cX=gX(e);};w.ontouchmove=e=>{if(isDg)cX=gX(e);};
-  const end=()=>{if(isDg){isDg=false;if(Math.abs(sX-cX)>42)gSlide(SI+(sX-cX>0?1:-1));}};
-  w.onmouseup=end;w.ontouchend=end;
+  // Mobile touch
+  const w=document.getElementById('slw');
+  if(!w)return;
+  const gX=e=>e.touches?e.touches[0].clientX:e.clientX;
+  w.ontouchstart=e=>{_touching=true;_touchX=gX(e);_touchDX=0;};
+  w.ontouchmove=e=>{if(_touching){_touchDX=gX(e)-_touchX;e.preventDefault();}};
+  w.ontouchend=()=>{
+    if(_touching&&Math.abs(_touchDX)>44){
+      mobileSlide(_touchDX<0?(SI+1)%(S.g('bans')||[]).length:(SI-1+(S.g('bans')||[]).length)%(S.g('bans')||[]).length);
+    }
+    _touching=false;
+  };
 }
-// gSlide handled below
+
+function mobileSlide(n){
+  const bans=S.g('bans')||[];
+  if(!bans.length)return;
+  SI=((n%bans.length)+bans.length)%bans.length;
+  const tr=document.getElementById('sltr');
+  if(tr){
+    tr.style.transition='transform .45s cubic-bezier(.4,0,.2,1)';
+    tr.style.transform=`translateX(-${SI*100}%)`;
+  }
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('on',i===SI));
+}
 function TH(g,full){return g.img?`<img src="${g.img}" style="width:100%;height:100%;object-fit:cover">`:`<div style="width:100%;height:100%;background:${g.col};display:flex;align-items:center;justify-content:center;font-size:${full?'36px':'32px'}">${g.e||''}</div>`;}
 function rHome(){rBanner();rPop();rGrid('agH');}
 function rPop(){const gm=S.g('games')||[];const gr=document.getElementById('pgH');if(!gr)return;gr.innerHTML=gm.filter(g=>g.pop).slice(0,6).map(g=>`<div class="pc" onclick="openGame(${g.id})"><div class="pth">${TH(g,true)}<span class="bhot">HOT</span></div><div class="pname">${g.name}</div></div>`).join('');}
@@ -1320,7 +1377,7 @@ let cGid=null,cPkg=null;
 const ZONE_GAMES=[2,4,5,6];
 function chkZone(){const zw=document.getElementById('zoneWrap');if(zw)zw.style.display=ZONE_GAMES.includes(cGid)?'block':'none';}
 function openGame(id){
-  if(!CU){openAuthModal('login');return;}
+  if(!CU){showPopAlert('warn','ກະລຸນາເຂົ້າສູ່ລະບົບ','ຕ້ອງເຂົ້າສູ່ລະບົບກ່ອນຈຶ່ງຈະເຕີມເກມໄດ້',3000);return;}
   cGid=id;cPkg=null;discAmt=0;discLabel='';
   const gm=S.g('games')||[];const g=gm.find(x=>x.id===id);if(!g)return;
   document.getElementById('dnavnm').textContent=g.name;
