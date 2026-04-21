@@ -674,11 +674,11 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
     </div>
   </div>
   <div class="dmid">
-    <div class="di" onclick="go('home');cD()"><div class="dic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg></div>ໜ້າຫຼັກ</div>
-    <div class="di" onclick="go('games');cD()"><div class="dic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M8 12h2m0 0h2m-2 0v-2m0 2v2"/><circle cx="16" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="19" cy="11" r="1" fill="currentColor" stroke="none"/><circle cx="16" cy="14" r="1" fill="currentColor" stroke="none"/><circle cx="19" cy="14" r="1" fill="currentColor" stroke="none"/></svg></div>ເກມທັງໝົດ</div>
-    <div class="di" onclick="needAuth(()=>{go('history');cD();})"><div class="dic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>ປະຫວັດ</div>
-    <div class="di" onclick="needAuth(()=>{go('profile');cD();})"><div class="dic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>ໂປຣໄຟລ໌</div>
-    <div class="di" onclick="go('help');cD()"><div class="dic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/></svg></div>ຕິດຕໍ່ຫາ</div>
+    <div class="di" onclick="go('home');cD()"><div class="dic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>ໜ້າຫຼັກ</div>
+    <div class="di" onclick="go('games');cD()"><div class="dic"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="2" y="6" width="20" height="12" rx="3"/><path d="M8 12h2m0 0h2m-2 0v-2m0 2v2"/><circle cx="16" cy="11" r="1.2" fill="currentColor" stroke="none"/><circle cx="19" cy="11" r="1.2" fill="currentColor" stroke="none"/><circle cx="16" cy="14" r="1.2" fill="currentColor" stroke="none"/><circle cx="19" cy="14" r="1.2" fill="currentColor" stroke="none"/></svg></div>ເກມທັງໝົດ</div>
+    <div class="di" onclick="needAuth(()=>{go('history');cD();})"><div class="dic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 8v4l3 3"/><path d="M3.05 11a9 9 0 1 0 .5-3M3 4v4h4"/></svg></div>ປະຫວັດ</div>
+    <div class="di" onclick="needAuth(()=>{go('profile');cD();})"><div class="dic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>ໂປຣໄຟລ໌</div>
+    <div class="di" onclick="go('help');cD()"><div class="dic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>ຕິດຕໍ່ຫາ</div>
   </div>
   <div class="dfoot">
     <div id="dadmWrap" style="display:none;margin-bottom:8px"><button class="dadm" onclick="cD();openAdm()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Admin Panel</button></div>
@@ -1037,7 +1037,17 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
     <!-- ORDERS -->
     <div class="asec" id="as-ord"><div class="admc"><h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2"/><rect x="9" y="3" width="6" height="4" rx="1"/><line x1="9" y1="12" x2="15" y2="12"/><line x1="9" y1="16" x2="13" y2="16"/></svg>Orders</h3><div id="oA"></div></div></div>
     <!-- USERS -->
-    <div class="asec" id="as-usr"><div class="admc"><h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Users</h3><div id="uA"></div></div></div>
+    <div class="asec" id="as-usr"><div class="admc">
+      <h3 style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+        <span><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>Users</span>
+        <span id="uCount" style="font-size:11px;color:var(--t3);font-weight:400"></span>
+      </h3>
+      <div style="display:flex;align-items:center;gap:8px;background:var(--bg3);border:1.5px solid var(--br);border-radius:12px;padding:8px 14px;margin-bottom:12px">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" id="uSearch" placeholder="ຄົ້ນຫາ ຊື່ / email / ID..." oninput="filterUsers()" style="border:none;background:none;outline:none;flex:1;font-size:13px;color:var(--t);font-family:inherit">
+      </div>
+      <div id="uA"></div>
+    </div></div>
     <!-- CONTACTS -->
     <div class="asec" id="as-ct">
       <div class="admc"><h3><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="vertical-align:middle;margin-right:6px"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8a19.79 19.79 0 01-3.07-8.63A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>ຊ່ອງທາງຕິດຕໍ່</h3>
@@ -1057,40 +1067,43 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 <nav class="bot" id="botN">
   <div class="bni on" onclick="go('home');bn(this)">
     <div class="bic">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/>
       </svg>
     </div>
     <div class="bnl">ໜ້າຫຼັກ</div>
   </div>
   <div class="bni" onclick="needAuth(()=>{go('pWallet');bn(this);})">
     <div class="bic">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8L4 7h16l-4-4z"/><circle cx="17" cy="14" r="1.5" fill="currentColor" stroke="none"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="7" width="20" height="14" rx="3"/>
+        <path d="M16 2H8L2 7h20l-6-5z"/>
+        <circle cx="16" cy="14" r="2" fill="currentColor" stroke="none"/>
       </svg>
     </div>
-    <div class="bnl">ເຕີມເຄຣດິດ</div>
+    <div class="bnl">ເຕີມກຣີດິດ</div>
   </div>
   <div class="bni" onclick="needAuth(()=>{go('history');bn(this);})">
     <div class="bic">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M12 8v4l3 3"/><path d="M3.05 11a9 9 0 1 0 .5-3M3 4v4h4"/>
       </svg>
     </div>
     <div class="bnl">ປະຫວັດ</div>
   </div>
   <div class="bni" onclick="needAuth(()=>{go('profile');bn(this);})">
     <div class="bic">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="8" r="4"/>
+        <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
       </svg>
     </div>
-    <div class="bnl">ໂປຣໄຟ</div>
+    <div class="bnl">ໂປຣໄຟລ໌</div>
   </div>
   <div class="bni" onclick="go('help');bn(this)">
     <div class="bic">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/>
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
     </div>
     <div class="bnl">ຕິດຕໍ່</div>
@@ -1601,8 +1614,78 @@ function rOrdA(){const ords=S.g('orders')||[];const list=document.getElementById
 async function upOS(i,v){const o=S.g('orders')||[];o[i].status=v;S.s('orders',o);try{await api('PUT','/admin/order/status',{id:o[i].id,status:v});}catch(e){}rOrdA();toast('ອັບເດດ','ok');}
 async function delOrd(i){if(!confirm('ລຶບ?'))return;const o=S.g('orders')||[];const ord=o[i];o.splice(i,1);S.s('orders',o);rOrdA();try{await api('DELETE','/admin/order/'+ord.id);}catch(e){console.warn(e);}toast('ລຶບ Order','ok');}
 /* USERS */
-function rUsrA(){const users=S.g('users')||[];const ords=S.g('orders')||[];const list=document.getElementById('uA');if(!users.length){list.innerHTML='<div class="empty"><p>ຍັງບໍ່ມີ</p></div>';return;}list.innerHTML=users.map((u,i)=>{const cnt=ords.filter(o=>o.userId===u.email).length;const rl=u.role==='admin'?`<span class="role-admin">Admin</span>`:`<span class="role-user">User</span>`;return `<div class="adurow"><div class="aduav">${u.name[0].toUpperCase()}</div><div class="rinf"><div class="rnm">${u.name} ${rl}</div><div class="rsb">${u.email} · ${cnt} Orders · Wallet: ${u.wallet||0} ກີບ</div></div><div style="display:flex;gap:4px"><button class="bed" style="font-size:11px;padding:5px 9px" onclick="editUser(${i})">ແກ້</button></div></div>`;}).join('');}
-function editUser(i){const users=S.g('users')||[];const u=users[i];openEdit('ຈັດການ: '+u.name,`<label>Wallet (ກີບ)</label><input type="number" id="f-w" value="${u.wallet||0}" min="0"><label>Role</label><select id="f-r"><option value="user" ${(u.role||'user')==='user'?'selected':''}>User</option><option value="admin" ${u.role==='admin'?'selected':''}>Admin</option></select>`,async()=>{users[i]={...u,wallet:parseInt(document.getElementById('f-w').value)||0,role:document.getElementById('f-r').value};S.s('users',users);rUsrA();try{await api('PUT','/admin/user/'+u.email,{wallet:users[i].wallet,role:users[i].role});}catch(e){}toast('ອັບເດດ','ok');});}
+function rUsrA(q=''){
+  const users=S.g('users')||[];
+  const ords=S.g('orders')||[];
+  const list=document.getElementById('uA');
+  const cnt=document.getElementById('uCount');
+  const filtered=q?users.filter(u=>
+    (u.name||'').toLowerCase().includes(q)||
+    (u.email||'').toLowerCase().includes(q)||
+    String(u.user_id||'').includes(q)
+  ):users;
+  if(cnt)cnt.textContent=filtered.length+'/'+users.length+' users';
+  if(!filtered.length){list.innerHTML='<div class="empty"><p>ບໍ່ພົບ user</p></div>';return;}
+  list.innerHTML=filtered.map((u,i)=>{
+    const realIdx=users.indexOf(u);
+    const oc=ords.filter(o=>o.user_email===u.email||o.userId===u.email).length;
+    const rl=u.role==='admin'?`<span class="role-admin">Admin</span>`:`<span class="role-user">User</span>`;
+    return `<div class="adurow">
+      <div class="aduav" style="background:${u.role==='admin'?'linear-gradient(135deg,#e8192c,#ff6b35)':'var(--R)'}">${(u.name||'?')[0].toUpperCase()}</div>
+      <div class="rinf">
+        <div class="rnm">${u.name} ${rl} <span style="font-size:10px;color:var(--t3);font-weight:400">ID: ${u.user_id||'-'}</span></div>
+        <div class="rsb">${u.email}</div>
+        <div class="rsb">${oc} Orders · 💰 ${(u.wallet||0).toLocaleString()} ກີບ · ສະໝັກ: ${u.joined?u.joined.slice(0,10):'-'}</div>
+      </div>
+      <div style="display:flex;gap:4px;flex-shrink:0">
+        <button class="bed" style="font-size:11px;padding:5px 9px" onclick="editUser(${realIdx})">ແກ້ໄຂ</button>
+        <button class="bdl" style="font-size:11px;padding:5px 9px" onclick="confirmDelUser(${realIdx})">ລຶບ</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function filterUsers(){
+  const q=(document.getElementById('uSearch')||{}).value||'';
+  rUsrA(q.toLowerCase());
+}
+function editUser(i){
+  const users=S.g('users')||[];const u=users[i];
+  openEdit('ຈັດການ: '+u.name,`
+    <label>ຊື່ຜູ້ໃຊ້</label>
+    <input type="text" id="f-nm" value="${u.name||''}">
+    <label>Wallet (ກີບ)</label>
+    <input type="number" id="f-w" value="${u.wallet||0}" min="0">
+    <label>Role</label>
+    <select id="f-r">
+      <option value="user" ${(u.role||'user')==='user'?'selected':''}>User</option>
+      <option value="admin" ${u.role==='admin'?'selected':''}>Admin</option>
+    </select>
+    <label>ລີເຊັດລະຫັດຜ່ານໃໝ່ (ເວັ້ນຫວ່າງ = ບໍ່ປ່ຽນ)</label>
+    <input type="password" id="f-pw" placeholder="ລະຫັດໃໝ່ (6+ ຕົວ)" autocomplete="new-password">
+  `,async()=>{
+    const newName=document.getElementById('f-nm').value.trim();
+    const newWallet=parseInt(document.getElementById('f-w').value)||0;
+    const newRole=document.getElementById('f-r').value;
+    const newPw=document.getElementById('f-pw').value;
+    if(newPw&&newPw.length<6){toast('ລະຫັດຕ້ອງ 6 ຕົວຂຶ້ນໄປ','warn');return;}
+    const update={wallet:newWallet,role:newRole};
+    if(newName&&newName!==u.name)update.name=newName;
+    if(newPw)update.password=newPw;
+    users[i]={...u,...update,name:newName||u.name};
+    S.s('users',users);rUsrA((document.getElementById('uSearch')||{}).value||'');
+    try{
+      await api('PUT','/admin/user/'+u.email,update);
+      toast('ອັບເດດ user ສຳເລັດ','ok');
+    }catch(e){toast('Error: '+e.message,'err');}
+  });
+}
+async function confirmDelUser(i){
+  const users=S.g('users')||[];const u=users[i];
+  if(!confirm('ລຶບ user: '+u.name+' ('+u.email+') ?'))return;
+  users.splice(i,1);S.s('users',users);rUsrA();
+  try{await api('DELETE','/admin/user/'+u.email);}catch(e){console.warn(e);}
+  toast('ລຶບ user ແລ້ວ','ok');
+}
 /* CONTACTS */
 function rCtA(){const ct=S.g('contacts')||{};document.getElementById('ctFB').value=ct.fb||'';document.getElementById('ctTT').value=ct.tt||'';document.getElementById('ctWA').value=ct.wa||'';}
 async function saveContacts(){const ct={fb:document.getElementById('ctFB').value,tt:document.getElementById('ctTT').value,wa:document.getElementById('ctWA').value};S.s('contacts',ct);try{await api('PUT','/admin/settings/contacts',ct);}catch(e){}toast('ບັນທຶກແລ້ວ','ok');}
