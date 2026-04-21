@@ -1148,6 +1148,9 @@ const S={g:k=>{try{return JSON.parse(localStorage.getItem('es_'+k));}catch{retur
 // Password hashing is handled server-side (bcrypt). No client-side hash needed.
 
 async function initDB(){
+  // Use cached data immediately if available
+  const cached = S.g('games');
+  if(cached && cached.length) rHome();
   try{
     const d = await api('GET','/store/init');
     // Games
@@ -1958,7 +1961,15 @@ function updSidebar(){
 // Carousel handled above
 
 window.onload=async()=>{
-  await initDB();loadSess();
+  // Show UI immediately with cached data
+  loadSess();
+  // Hide loader fast
+  setTimeout(()=>{const l=document.getElementById('loader');if(l)l.classList.add('hide');},300);
+  // Load fresh data in background (non-blocking)
+  initDB().then(()=>{
+    rHome();
+    // Update route after data loaded
+  }).catch(()=>{});
   // Handle redirect from 404.html
   const redirectPath = sessionStorage.getItem('es_redirect');
   if(redirectPath){ sessionStorage.removeItem('es_redirect'); window.history.replaceState(null,'',redirectPath); }
@@ -1980,7 +1991,7 @@ window.onload=async()=>{
     setTimeout(()=>openAuthModal('login'),400);
     window.history.replaceState(null,'','/');
   }
-  setTimeout(()=>{const l=document.getElementById('loader');if(l)l.classList.add('hide');},600);
+  // loader hidden above
 };
 window.addEventListener('popstate',(e)=>{
   const urlMap={'/':'home','/games':'games','/login':'home','/profile':'profile','/history':'history','/contact':'help','/wallet':'pWallet'};
