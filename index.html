@@ -1443,7 +1443,7 @@ function openCof(){
   go('confirm');
 }
 function cCof(){go('detail','back');}
-async function doOrder(){showLoading('ກຳລັງສົ່ງຄຳສັ່ງ...');
+async function doOrder(){
   const uid=document.getElementById('uIn').value.trim();
   const gm=S.g('games')||[];const g=gm.find(x=>x.id===cGid);
   const pkgs=(S.g('pkgs')||{})[cGid]||[];const p=pkgs.find(x=>x.id===cPkg);
@@ -1451,56 +1451,62 @@ async function doOrder(){showLoading('ກຳລັງສົ່ງຄຳສັ່
   const payNm=document.querySelector('.payo.on .paynm')?.textContent||'';
   const zone=(document.getElementById('zoneIn')&&document.getElementById('zoneIn').style.display!=='none'?document.getElementById('zoneIn').value.trim():'');
   const discCode=document.getElementById('discIn').value.trim().toUpperCase();
+
+  // STEP 1: ສ້າງ Order
+  showLoading('ກຳລັງສ້າງ Order...');
+  let ord;
   try{
     const res = await api('POST','/order/create',{
       game_id:cGid, package_id:cPkg,
       uid_game:uid, zone, pay:payNm,
       coupon_code:discCode
     });
-    // Refresh wallet from server response
     if(res.new_wallet_balance !== undefined && CU){
       CU.wallet = res.new_wallet_balance;
       S.s('sess',CU);
     }
-    const ord = res.order;
+    ord = res.order;
     const orders=S.g('orders')||[];orders.unshift(ord);S.s('orders',orders);
-    document.getElementById('roid').textContent=ord.id;
-    document.getElementById('rgic').innerHTML=TH(g,true);
-    document.getElementById('rgnm').textContent=g.name;document.getElementById('rgpk').textContent=p.name;
-    document.getElementById('ruid').textContent=uid;document.getElementById('rpay').textContent=payNm;
-    const base=numParse(p.price);const total=Math.max(0,base-discAmt);
-    const rdr=document.getElementById('rdiscrow');if(discAmt>0){rdr.style.display='flex';document.getElementById('rdisc').textContent='-'+discAmt.toLocaleString()+' ກີບ';}else{rdr.style.display='none';}
-    document.getElementById('rtime').textContent=ord.time;
-    document.getElementById('rstatEl').textContent='ລໍຖ້າ';document.getElementById('rstatEl').className='rval pend';
-    go('receipt');
-    // ── Auto WonDD Topup ──────────────────────────────────────
-    hideLoading();
-    showSuccess('ສ້າງ Order ແລ້ວ!','ກຳລັງສົ່ງໄປ WonDD...',null);
-    try{
-      const wonddRes = await api('POST','/wondd/topup',{
-        order_id: ord.id,
-        game_id:  cGid,
-        packcode: p.wondd_packcode || p.id,
-        gameid_player: uid,
-        zone: zone||'',
-      });
-      if(wonddRes.success){
-        document.getElementById('rstatEl').textContent='ກຳລັງດຳເນີນການ';
-        document.getElementById('rstatEl').className='rval pend';
-        setTimeout(()=>showSuccess('ສົ່ງ WonDD ສຳເລັດ!','ລໍຖ້າຈ່າຍຂໍ້ມູນເຂົ້າໃໝ່'),300);
-      }
-    }catch(wonddErr){
-      // WonDD failed but order exists - admin handles manually
-      console.warn('WonDD topup failed:',wonddErr.message);
-      setTimeout(()=>showSuccess('ຄຳສັ່ງຖືກສ້າງ!','ລະບົບ Auto-topup ຕ້ອງດຳເນີນການ​ດ້ວຍຕົນເອງ'),300);
-    }
   }catch(e){
     hideLoading();
     if(e.message.includes('insufficient')||e.message.includes('ຍອດເງິນ')){
-      toast('ຍອດເງິນບໍ່ພໍ! ກະລຸນາເຕີມກ່ອນ','err');
+      showPopAlert('err','ຍອດເງິນບໍ່ພໍ!','ກະລຸນາເຕີມເງິນກ່ອນ',3500);
     } else {
-      toast('ເກີດຂໍ້ຜິດພາດ: '+e.message,'err');
+      showPopAlert('err','ຜິດພາດ!','ເກີດຂໍ້ຜິດພາດ: '+e.message,3500);
     }
+    return;
+  }
+
+  // STEP 2: ສົ່ງ WonDD ແລ້ວລໍຖ້າຜົນ
+  showLoading('ກຳລັງເຕີມໃຫ້... ກະລຸນາລໍຖ້າ');
+  try{
+    const wonddRes = await api('POST','/wondd/topup',{
+      order_id: ord.id,
+      game_id:  cGid,
+      packcode: p.wondd_packcode || p.id,
+      gameid_player: uid,
+      zone: zone||'',
+    });
+    if(wonddRes.success){
+      hideLoading();
+      // ອັບເດດ cache
+      const cachedOrders=S.g('orders')||[];
+      const co=cachedOrders.find(x=>x.id===ord.id);
+      if(co){co.status='processing';}
+      S.s('orders',cachedOrders);
+      // ໄປໜ້າສລິບ
+      document.getElementById('roid').textContent=ord.id;
+      document.getElementById('rgic').innerHTML=TH(g,true);
+      document.getElementById('rgnm').textContent=g.name;document.getElementById('rgpk').textContent=p.name;
+      document.getElementById('ruid').textContent=uid;document.getElementById('rpay').textContent=payNm;
+      const rdr=document.getElementById('rdiscrow');if(discAmt>0){rdr.style.display='flex';document.getElementById('rdisc').textContent='-'+discAmt.toLocaleString()+' ກີບ';}else{rdr.style.display='none';}
+      document.getElementById('rtime').textContent=ord.time;
+      document.getElementById('rstatEl').textContent='ທຸລະກຳສຳເລັດ';document.getElementById('rstatEl').className='rval done';
+      go('receipt');
+    }
+  }catch(wonddErr){
+    hideLoading();
+    showPopAlert('err','ເຕີມບໍ່ສຳເລັດ!',wonddErr.message||'ເກີດຂໍ້ຜິດພາດ — ເງິນຈະຖືກຄືນໃນ 1-5 ນາທີ',5000);
   }
 }
 
@@ -1576,10 +1582,8 @@ function viewR(oid){
   document.getElementById('roid').textContent=o.id;document.getElementById('rgic').innerHTML=g?TH(g,true):'';
   document.getElementById('rgnm').textContent=o.game;document.getElementById('rgpk').textContent=o.pkg;
   document.getElementById('ruid').textContent=o.uid;document.getElementById('rpay').textContent=o.pay;
-  document.getElementById('rprice').textContent=o.price+' ກີບ';
   const rdr=document.getElementById('rdiscrow');const da=o.discount||0;
   if(da>0){rdr.style.display='flex';document.getElementById('rdisc').textContent='-'+parseInt(da).toLocaleString()+' ກີບ';}else{rdr.style.display='none';}
-  document.getElementById('rtotal').textContent=(o.total||o.price)+' ກີບ';
   document.getElementById('rtime').textContent=o.time;
   const el=document.getElementById('rstatEl');el.textContent=o.status==='done'?'ສຳເລັດ':o.status==='failed'?'ລົ້ມ':'ລໍຖ້າ';el.className='rval '+(o.status==='done'?'done':'pend');go('receipt');
 }
