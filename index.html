@@ -1452,8 +1452,8 @@ async function doOrder(){
   const zone=(document.getElementById('zoneIn')&&document.getElementById('zoneIn').style.display!=='none'?document.getElementById('zoneIn').value.trim():'');
   const discCode=document.getElementById('discIn').value.trim().toUpperCase();
 
-  // STEP 1: ສ້າງ Order
-  showLoading('ກຳລັງສ້າງ Order...');
+  // STEP 1 + 2: ສ້າງ Order ແລ້ວເຕີມທັນທີ (loading ດຽວ)
+  showLoading('ກຳລັງເຕີມໃຫ້ ກະລຸນາລໍຖ້າ...');
   let ord;
   try{
     const res = await api('POST','/order/create',{
@@ -1466,7 +1466,7 @@ async function doOrder(){
       S.s('sess',CU);
     }
     ord = res.order;
-    const orders=S.g('orders')||[];orders.unshift(ord);S.s('orders',orders);
+    // ຍັງບໍ່ push ປະຫວັດ — ລໍໃຫ້ WonDD ສຳເລັດກ່ອນ
   }catch(e){
     hideLoading();
     if(e.message.includes('insufficient')||e.message.includes('ຍອດເງິນ')){
@@ -1478,7 +1478,6 @@ async function doOrder(){
   }
 
   // STEP 2: ສົ່ງ WonDD ແລ້ວລໍຖ້າຜົນ
-  showLoading('ກຳລັງເຕີມໃຫ້... ກະລຸນາລໍຖ້າ');
   try{
     const wonddRes = await api('POST','/wondd/topup',{
       order_id: ord.id,
@@ -1489,12 +1488,9 @@ async function doOrder(){
     });
     if(wonddRes.success){
       hideLoading();
-      // ອັບເດດ cache
-      const cachedOrders=S.g('orders')||[];
-      const co=cachedOrders.find(x=>x.id===ord.id);
-      if(co){co.status='processing';}
-      S.s('orders',cachedOrders);
-      // ໄປໜ້າສລິບ
+      // ສຳເລັດ → push ປະຫວັດ + ໄປໜ້າສລິບ
+      ord.status='processing';
+      const orders=S.g('orders')||[];orders.unshift(ord);S.s('orders',orders);
       document.getElementById('roid').textContent=ord.id;
       document.getElementById('rgic').innerHTML=TH(g,true);
       document.getElementById('rgnm').textContent=g.name;document.getElementById('rgpk').textContent=p.name;
@@ -1506,6 +1502,7 @@ async function doOrder(){
     }
   }catch(wonddErr){
     hideLoading();
+    // ລົ້ມ → ບໍ່ push ປະຫວັດ (server ຄືນເງິນອັດຕະໂນມັດ)
     showPopAlert('err','ເຕີມບໍ່ສຳເລັດ!',wonddErr.message||'ເກີດຂໍ້ຜິດພາດ — ເງິນຈະຖືກຄືນໃນ 1-5 ນາທີ',5000);
   }
 }
@@ -1581,7 +1578,7 @@ function viewR(oid){
   const gm=S.g('games')||[];const g=gm.find(x=>x.name===o.game);
   document.getElementById('roid').textContent=o.id;document.getElementById('rgic').innerHTML=g?TH(g,true):'';
   document.getElementById('rgnm').textContent=o.game;document.getElementById('rgpk').textContent=o.pkg;
-  document.getElementById('ruid').textContent=o.uid;document.getElementById('rpay').textContent=o.pay;
+  document.getElementById('ruid').textContent=o.uid_game||o.uid||'-';document.getElementById('rpay').textContent=o.pay;
   const rdr=document.getElementById('rdiscrow');const da=o.discount||0;
   if(da>0){rdr.style.display='flex';document.getElementById('rdisc').textContent='-'+parseInt(da).toLocaleString()+' ກີບ';}else{rdr.style.display='none';}
   document.getElementById('rtime').textContent=o.time;
