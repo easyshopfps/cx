@@ -1570,8 +1570,13 @@ async function doReg(){
 }
 function doLogout(){if(!confirm('ອອກ?'))return;stopWalletPoll();CU=null;_apiToken=null;S.d('sess');updNav();go('home','back');toast('ອອກຈາກລະບົບແລ້ວ','ok');}
 
-function rProf(){
+async function rProf(){
   if(!CU)return;
+  // ດຶງຂໍ້ມູນຈາກ server ສະເໝີ — wallet ຖືກຕ້ອງ real-time
+  try{
+    const u=await api('GET','/user/profile');
+    if(u){CU.wallet=u.wallet;CU.name=u.name;CU.role=u.role;CU.isAdmin=u.role==='admin';S.s('sess',CU);updNav();}
+  }catch(e){}
   document.getElementById('pav').textContent=CU.name[0].toUpperCase();
   document.getElementById('pnm2').textContent=CU.name;document.getElementById('pem').textContent=CU.email;
   document.getElementById('puid').textContent='ID: '+(CU.user_id||'-');
@@ -1580,8 +1585,8 @@ function rProf(){
   document.getElementById('walletBal').textContent=(CU.wallet||0).toLocaleString()+' ກີບ';const pbl=document.getElementById('payBalLbl');if(pbl)pbl.textContent='ຍອດເງິນຄົງເຫຼືອ: '+(CU.wallet||0).toLocaleString()+' ກີບ';
   const ords=(S.g('orders')||[]).filter(o=>o.userId===CU.email);
   document.getElementById('poc').textContent=ords.length;document.getElementById('pos').textContent=ords.length+' Orders';
-  const users=S.g('users')||[];const u=users.find(x=>x.email===CU.email);
-  if(u){const m=Math.floor((Date.now()-new Date(u.joined))/(1000*60*60*24*30));document.getElementById('pjd').textContent=m||'<1';}
+  const users=S.g('users')||[];const ua=users.find(x=>x.email===CU.email);
+  if(ua){const m=Math.floor((Date.now()-new Date(ua.joined))/(1000*60*60*24*30));document.getElementById('pjd').textContent=m||'<1';}
 }
 function _renderHistList(ords){
   const gm=S.g('games')||[];
