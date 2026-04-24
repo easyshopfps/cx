@@ -1183,7 +1183,15 @@ async function refreshWallet(){
   try{
     const u=await api('GET','/user/profile');
     if(u&&u.wallet!==undefined&&CU.wallet!==u.wallet){
-      CU.wallet=u.wallet;S.s('sess',CU);updNav();
+      CU.wallet=u.wallet;S.s('sess',CU);
+      updNav(); // ອັບເດດ navbar ທຸກໜ້າທັນທີ
+      // ຖ້າຜູ້ໃຊ້ຢູ່ໜ້າໂປຣໄຟລ໌ ໃຫ້ re-render ຕົວເລກດ້ວຍ
+      const profPage=document.getElementById('pP');
+      if(profPage&&profPage.classList.contains('on')){
+        document.getElementById('pwal').textContent=(CU.wallet||0).toLocaleString();
+        document.getElementById('walletBal').textContent=(CU.wallet||0).toLocaleString()+' ກີບ';
+        const pbl=document.getElementById('payBalLbl');if(pbl)pbl.textContent='ຍອດເງິນຄົງເຫຼືອ: '+(CU.wallet||0).toLocaleString()+' ກີບ';
+      }
     }
   }catch(e){}
 }
@@ -2025,6 +2033,8 @@ function updSidebar(){
 window.onload=async()=>{
   // Show UI immediately with cached data
   loadSess();
+  // ຖ້າມີ session ຢູ່ແລ້ວ (ບໍ່ໄດ້ login ໃໝ່) ໃຫ້ start poll ທັນທີ
+  if(CU)startWalletPoll();
   // Hide loader fast
   setTimeout(()=>{const l=document.getElementById('loader');if(l)l.classList.add('hide');},300);
   // Load fresh data in background (non-blocking)
