@@ -1466,39 +1466,43 @@ function rPromo(){
   }
 
   // เริ่มที่ index 0 (offset 1 เพราะ clone)
-  moveTo(0, false);
+  requestAnimationFrame(()=>moveTo(0, false));
 
   // หลัง transition ถ้าถึง clone ให้ jump แบบไม่มี animation
+  let _jumping=false;
   track.addEventListener('transitionend', ()=>{
-    if(ci === n){ ci=0; moveTo(0, false); }
-    else if(ci === -1){ ci=n-1; moveTo(n-1, false); }
+    if(_jumping)return;
+    if(ci>=n){ _jumping=true; ci=ci%n; moveTo(ci,false); setTimeout(()=>_jumping=false,50); }
+    else if(ci<0){ _jumping=true; ci=((ci%n)+n)%n; moveTo(ci,false); setTimeout(()=>_jumping=false,50); }
   });
 
   if(_promoTimer)clearInterval(_promoTimer);
-  _promoTimer = setInterval(()=>{ ci++; moveTo(ci, true); }, 3000);
+  function startTimer(){ _promoTimer=setInterval(()=>{ ci++; moveTo(ci,true); },3000); }
+  startTimer();
 
   // ── Touch/swipe ──────────────────────────────────────────────────────
-  const wrap = track.parentElement;
-  let tx=0, startX=0, dragging=false;
-  wrap.addEventListener('touchstart', e=>{
-    startX = e.touches[0].clientX;
-    dragging = true;
+  const wrap=track.parentElement;
+  let tx=0,startX=0,dragging=false;
+  wrap.addEventListener('touchstart',e=>{
+    if(_jumping)return;
+    startX=e.touches[0].clientX; dragging=true;
     if(_promoTimer){clearInterval(_promoTimer);_promoTimer=null;}
     track.style.transition='none';
   },{passive:true});
-  wrap.addEventListener('touchmove', e=>{
+  wrap.addEventListener('touchmove',e=>{
     if(!dragging)return;
-    tx = e.touches[0].clientX - startX;
-    const base = -(ci+1)*(wrap.offsetWidth+GAP);
-    track.style.transform=`translateX(${base+tx}px)`;
+    tx=e.touches[0].clientX-startX;
+    const cardW=wrap.offsetWidth+GAP;
+    track.style.transform=`translateX(${-(ci+1)*cardW+tx}px)`;
   },{passive:true});
-  wrap.addEventListener('touchend', ()=>{
+  wrap.addEventListener('touchend',()=>{
+    if(!dragging)return;
     dragging=false;
-    if(tx < -50){ ci++; }
-    else if(tx > 50){ ci--; }
-    moveTo(ci, true);
+    if(tx<-40)ci++;
+    else if(tx>40)ci--;
     tx=0;
-    _promoTimer = setInterval(()=>{ ci++; moveTo(ci, true); }, 3000);
+    moveTo(ci,true);
+    startTimer();
   });
 }
 
