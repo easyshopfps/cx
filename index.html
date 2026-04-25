@@ -501,8 +501,8 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
 
 /* Promo Cards */
 .promo-wrap{padding:0 12px 4px;overflow:hidden;}
-.promo-track{display:flex;transition:transform .45s cubic-bezier(.4,0,.2,1);}
-.promo-card{flex-shrink:0;width:100%;border-radius:18px;overflow:hidden;position:relative;min-height:120px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.15);}
+.promo-track{display:flex;gap:12px;transition:transform .45s cubic-bezier(.4,0,.2,1);}
+.promo-card{flex-shrink:0;width:calc(100% - 24px);border-radius:18px;overflow:hidden;position:relative;min-height:120px;cursor:pointer;box-shadow:0 4px 18px rgba(0,0,0,.15);}
 .promo-card img.promo-bg{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;}
 .promo-card .promo-overlay{position:absolute;inset:0;background:linear-gradient(90deg,rgba(0,0,0,.65) 0%,rgba(0,0,0,.1) 100%);}
 .promo-card .promo-body{position:relative;z-index:1;padding:18px 16px;display:flex;flex-direction:column;justify-content:center;min-height:120px;}
@@ -1426,15 +1426,15 @@ function fg(gid,iid){const q=document.getElementById(iid).value.toLowerCase();co
 
 /* PROMO CARDS */
 let _promoTimer=null;
-let _pSI=0; // promo current index
-function _promoSlide(n){
+let _pSI=0;
+function _promoGoTo(n){
   const promos=(S.g('promos')||[]).filter(p=>p.active);
   if(!promos.length)return;
   _pSI=((n%promos.length)+promos.length)%promos.length;
   const track=document.getElementById('promoTrack');
   if(track){
     track.style.transition='transform .45s cubic-bezier(.4,0,.2,1)';
-    track.style.transform=`translateX(-${_pSI*100}%)`;
+    track.style.transform=`translateX(calc(-${_pSI}*(100% + 12px)))`;
   }
   document.querySelectorAll('#promoDots span').forEach((d,i)=>d.classList.toggle('on',i===_pSI));
 }
@@ -1464,19 +1464,19 @@ function rPromo(){
   track.style.transition='none';
   track.style.transform='translateX(0)';
   clearInterval(_promoTimer);
-  _promoTimer=setInterval(()=>_promoSlide(_pSI+1),3000);
-  // touch swipe — เหมือน banner
+  _promoTimer=setInterval(()=>_promoGoTo(_pSI+1),3000);
+  // touch swipe
   const wrap=track.parentElement;
-  const gX=e=>e.touches?e.touches[0].clientX:e.clientX;
-  let _ptx=0,_ptouching=false;
-  wrap.ontouchstart=e=>{_ptouching=true;_ptx=gX(e);};
-  wrap.ontouchmove=e=>{if(_ptouching){_ptx=gX(e)-_ptx;e.preventDefault();}};
-  wrap.ontouchend=e=>{
-    const dx=gX(e)-_ptx;
-    if(_ptouching&&Math.abs(dx)>44){
-      _promoSlide(dx<0?_pSI+1:_pSI-1);
+  let _pStartX=0,_pDX=0,_pTouching=false;
+  wrap.ontouchstart=e=>{_pTouching=true;_pStartX=e.touches[0].clientX;_pDX=0;};
+  wrap.ontouchmove=e=>{if(_pTouching){_pDX=e.touches[0].clientX-_pStartX;}};
+  wrap.ontouchend=()=>{
+    if(_pTouching&&Math.abs(_pDX)>44){
+      clearInterval(_promoTimer);
+      _promoGoTo(_pDX<0?_pSI+1:_pSI-1);
+      _promoTimer=setInterval(()=>_promoGoTo(_pSI+1),3000);
     }
-    _ptouching=false;_ptx=0;
+    _pTouching=false;_pDX=0;
   };
 }
 
