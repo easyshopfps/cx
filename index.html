@@ -1018,7 +1018,7 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
   <div style="padding:20px">
     <div style="background:var(--bg2);border-radius:20px;padding:24px;box-shadow:var(--s1);border:1px solid var(--br)">
       <div style="text-align:center;margin-bottom:20px">
-        <img src="https://img1.pic.in.th/images/979.png" style="width:130px;height:130px;object-fit:contain" onerror="this.style.display='none'">
+        <img src="https://img1.pic.in.th/images/979.png" style="width:130px;height:130px;object-fit:contain;display:block;margin:0 auto" onerror="this.style.display='none'">
         <div style="font-size:18px;font-weight:800;color:var(--t);margin-top:10px">ເຕີມເງິນດ້ວຍໂຄ້ດ</div>
         <div style="font-size:12px;font-weight:600;color:var(--t3)">Redeem Code</div>
         <div style="font-size:12px;color:var(--R);margin-top:8px;font-weight:600">* ໂຄ້ດທີ່ໄດ້ຮັບສາມາດໃຊ້ໄດ້ພຽງ 1 ຄັ້ງຕໍ່ທ່ານ *</div>
@@ -1046,7 +1046,7 @@ input,button,select{font-family:inherit;}img{display:block;}::-webkit-scrollbar{
   </div>
   <div class="mcard">
     <div class="mi" onclick="needAuth(()=>go('history'))"><div class="miic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div style="flex:1"><div class="mit">ປະຫວັດ Order</div><div class="mis" id="pos">0 Orders</div></div><span class="miarr">&#8250;</span></div>
-    <div class="mi" onclick="needAuth(()=>go('pWallet'))"><div class="miic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--R)" stroke-width="2.2" stroke-linecap="round"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/><path d="M16 3H8L4 7h16l-4-4z"/><circle cx="17" cy="14" r="1" fill="var(--R)" stroke="none"/></svg></div><div style="flex:1"><div class="mit">Wallet / ເຕີມເຄຣດິດ</div><div class="mis" id="walletBal">0 ກີບ</div></div><span class="miarr">&#8250;</span></div>
+    <div class="mi" onclick="needAuth(()=>go('pWallet'))"><div class="miic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--R)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 6h14v2H2z"/><rect x="2" y="8" width="20" height="13" rx="2"/><circle cx="18" cy="14" r="1.5" fill="var(--R)" stroke="none"/></svg></div><div style="flex:1"><div class="mit">Wallet / ເຕີມເຄຣດິດ</div><div class="mis" id="walletBal">0 ກີບ</div></div><span class="miarr">&#8250;</span></div>
     <div id="admmi" style="display:none" onclick="openAdm()" class="mi"><div class="miic" style="background:var(--Rl)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="var(--R)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div style="flex:1"><div class="mit" style="color:var(--R)">Admin Panel <span class="admibdg">ADMIN</span></div><div class="mis">ຈັດການລະບົບ</div></div><span class="miarr" style="color:var(--R)">&#8250;</span></div>
   </div>
   <button class="logbtn" onclick="doLogout()">ອອກຈາກລະບົບ</button>
@@ -1315,6 +1315,11 @@ function go(v,dir='enter'){
   window.scrollTo(0,0);
   if(v==='home')rHome();if(v==='games')rGrid('agG');if(v==='history')rHist();
   if(v==='profile')rProf();if(v==='help')rHelp();if(v==='pWallet')rWallet();
+  // sync bottom nav active
+  const bnMap={home:0,pWallet:1,history:2,profile:3,help:4};
+  const bnis=document.querySelectorAll('.bni');
+  bnis.forEach(b=>b.classList.remove('on'));
+  if(bnMap[v]!==undefined&&bnis[bnMap[v]])bnis[bnMap[v]].classList.add('on');
   // Update URL — detail/receipt push URL เองแล้ว
   if(v!=='detail'&&v!=='receipt'){
     const url=PURL[v]||'/';
